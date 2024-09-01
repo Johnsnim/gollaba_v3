@@ -6,6 +6,10 @@
   background-color: #e5f2ff;
 
   .LoginInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: #fff;
     height: 100%;
     width: 580px;
@@ -13,7 +17,6 @@
     .UpperPartContainer {
       display: flex;
       width: 100%;
-      margin-top: 131px;
       flex-direction: column;
       align-items: center;
 
@@ -33,9 +36,10 @@
     .LowerPartContainer {
       display: flex;
       width: 100%;
-      margin-top: 59px;
       flex-direction: column;
       align-items: center;
+      margin-top: 60px;
+      gap: 12px;
 
       .LoginBox {
         display: flex;
@@ -43,7 +47,7 @@
         align-items: center;
         justify-content: center;
         position: relative;
-        width: 470px;
+        width: 420px;
         height: 69px;
         border: 1px #d9d9d9 solid;
         border-radius: 3px;
@@ -58,7 +62,7 @@
         }
 
         .StartWithProvider {
-          font-size: 25px;
+          font-size: 22px;
           letter-spacing: -1px;
           font-weight: 500;
         }
@@ -67,6 +71,12 @@
           background-color: #d9d9d9;
         }
       }
+    }
+
+    .Copyright {
+      position: fixed;
+      bottom: 27px;
+      color: #d9d9d9;
     }
   }
 }
