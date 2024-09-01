@@ -1,0 +1,72 @@
+.Login {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #e5f2ff;
+
+  .LoginInner {
+    background-color: #fff;
+    height: 100%;
+    width: 580px;
+
+    .UpperPartContainer {
+      display: flex;
+      width: 100%;
+      margin-top: 131px;
+      flex-direction: column;
+      align-items: center;
+
+      .LoginIcon {
+        width: 230px;
+        height: 250px;
+      }
+
+      .Title {
+        margin-top: 16px;
+        font-size: 40px;
+        letter-spacing: -5%;
+        font-family: "YANGJIN";
+      }
+    }
+
+    .LowerPartContainer {
+      display: flex;
+      width: 100%;
+      margin-top: 59px;
+      flex-direction: column;
+      align-items: center;
+
+      .LoginBox {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 470px;
+        height: 69px;
+        border: 1px #d9d9d9 solid;
+        border-radius: 3px;
+        transition: background-color 0.3s;
+        cursor: pointer;
+
+        .ProviderIcon {
+          position: absolute;
+          left: 20px;
+          width: 40px;
+          height: 40px;
+        }
+
+        .StartWithProvider {
+          font-size: 25px;
+          letter-spacing: -1px;
+          font-weight: 500;
+        }
+
+        &:hover {
+          background-color: #d9d9d9;
+        }
+      }
+    }
+  }
+}
