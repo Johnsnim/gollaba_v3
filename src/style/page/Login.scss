@@ -7,12 +7,39 @@
 
   .LoginInner {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #fff;
     height: 100%;
     width: 580px;
+
+    .HomeButton {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      align-items: center;
+      transition: scale 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        scale: 1.05;
+      }
+
+      img {
+        height: 16px;
+        width: 16px;
+      }
+
+      div {
+        margin-left: 5px;
+        color: #c9c9c9;
+        font-size: 15px;
+      }
+    }
 
     .UpperPartContainer {
       display: flex;

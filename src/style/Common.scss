@@ -1,0 +1,10 @@
+@mixin CommonInnerStyle {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  height: 100%;
+  width: 1600px;
+}
