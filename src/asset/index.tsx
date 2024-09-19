@@ -26,3 +26,4 @@ export { default as MinusButton } from "./Write/Minus-Button.png";
 
 //Poll
 export { default as ViewIcon } from "./Poll/Eye.png";
+export { default as LeftArrow } from "./Poll/LeftArrow.png";

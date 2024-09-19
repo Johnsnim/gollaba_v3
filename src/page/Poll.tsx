@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   AnonymousIcon,
+  LeftArrow,
   MinusButton,
   MultipleVote,
   PlusIcon,
@@ -18,13 +19,15 @@ const Poll = () => {
     <div className="Poll">
       <div className="Inner">
         <div className="UpperDiv">
-          <div className="Title">저녁으로 무엇을 먹을까요?</div>
+          <div className="Title">
+            <img src={LeftArrow} alt="LeftArrow" />
+            저녁으로 무엇을 먹을까요?
+          </div>
           <div className="UpperDescription">
             <div className="Desc">
               <img src={Temp} />
               <div>홍길동 · 9월 16일 마감</div>
             </div>
-
             <img src={ViewIcon} alt="ViewIcon" className="ViewIcon" />
             <div>367</div>
           </div>
@@ -79,6 +82,23 @@ const Poll = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="VerticalLine"></div>
+        <div className="PollResultContainer">
+          <div className="Title">
+            <img src={LeftArrow} alt="Arrow" />
+            투표 결과
+          </div>
+          <div className="ResultOptions">
+            <div className="ResultOption">
+              <div className="OptionName">햄버거</div>
+              <div className="OptionPercent"></div>
+            </div>
+            <div className="ResultOption">
+              <div className="OptionName">피자</div>
+              <div className="OptionPercent"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

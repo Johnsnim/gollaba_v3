@@ -276,6 +276,7 @@ const Write = () => {
             </div>
           </div>
         </div>
+   
       </div>
     </div>
   );
