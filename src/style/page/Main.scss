@@ -1,0 +1,133 @@
+.Main {
+  display: flex;
+  justify-content: center;
+  height: auto;
+  width: 100%;
+  background-color: #e5f2ff;
+
+  .Inner {
+    @include CommonInnerStyle;
+    justify-content: flex-start;
+    padding-left: 64px;
+    padding-right: 64px;
+    z-index: 3;
+    height: auto;
+    margin-top: 60px;
+
+    .PollsContainer {
+      height: 266px;
+      width: 100%;
+      margin-top: 60px;
+
+      .TitleBox {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 18px;
+        height: 30px;
+        width: fit-content;
+        padding: 5px 10px;
+
+        background-color: #7aaee6;
+        border-top-right-radius: 10px;
+
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          background-color: #fd9741;
+        }
+      }
+
+      .PollsBox {
+        display: flex;
+        align-items: center;
+        height: 217px;
+        width: 100%;
+        background-color: #e5f2ff;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 10px 20px;
+        box-sizing: border-box;
+        gap: 10px;
+
+        .IndividualPoll {
+          display: flex;
+          flex-direction: column;
+          height: 90%;
+          width: 20%;
+          background-color: #fff;
+          border-radius: 5px;
+          position: relative;
+          padding: 22px 18px;
+          box-sizing: border-box;
+
+          &::before {
+            position: absolute;
+            content: "";
+            display: block;
+            width: 50%;
+            height: 1px;
+            top: 0;
+            left: 25%;
+            background-color: #478ad1;
+          }
+
+          .Top {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #13212c;
+            margin-bottom: 10px;
+
+            .Description {
+              height: auto;
+              .Title {
+                font-size: 14px;
+                font-weight: bold;
+              }
+
+              .Detail {
+                color: rgba(#13212c, 80%);
+                font-size: 10px;
+                font-weight: bold;
+              }
+            }
+
+            .Now {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background-color: #478ad1;
+              width: 44px;
+              height: 18px;
+              border-radius: 3px;
+              font-size: 10px;
+              color: #fff;
+            }
+          }
+
+          .Options {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+
+            .IndividualOption {
+              background-color: #fd9741;
+            }
+          }
+        }
+      }
+    }
+  }
+}
