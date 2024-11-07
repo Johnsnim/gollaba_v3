@@ -11,7 +11,9 @@ import {
   VoteInactive,
 } from "../asset";
 import DatePicker from "react-datepicker";
+import { ko } from "date-fns/locale/ko";
 import "react-datepicker/dist/react-datepicker.css";
+import VoteApi from "../services/vote";
 
 interface VoteOption {
   imageUrl: string | null;
@@ -78,18 +80,42 @@ const Write = () => {
     e.stopPropagation();
   };
 
-  const handleSubmit = () => {
-    const payload = {
-      userId: null,
-      creatorName: null,
-      title: title,
-      responseType: isSingle ? "single" : "multi",
-      isBallot: isAnon ? "Anonymous" : "Named",
-      options: voteOptions,
-      endedAt: selectedDate,
+  interface Payload {
+    userId: number | null;
+    creatorName: string;
+    title: string;
+    responseType: string;
+    isBallot: string;
+    options: { imageUrl: string | null; title: string }[];
+    endedAt: Date | null;
+  }
+
+  const handleSubmit = (): void => {
+    const formData = new FormData();
+    formData.append("userId", "null");
+    formData.append("creatorName", "홍길동");
+    formData.append("title", title);
+    formData.append("responseType", isSingle ? "single" : "multi");
+    formData.append("isBallot", isAnon ? "Anonymous" : "Named");
+    formData.append("endedAt", selectedDate ? selectedDate.toISOString() : "");
+
+    voteOptions.forEach((option, index) => {
+      formData.append(`options[${index}][title]`, option.title);
+      if (option.imageUrl) {
+        formData.append(`options[${index}][imageUrl]`, option.imageUrl);
+      }
+    });
+
+    const createPoll = async (formData: FormData) => {
+      try {
+        const response = await VoteApi.createPoll(formData);
+        console.log(response);
+      } catch (error) {
+        console.error("Error:", error);
+      }
     };
 
-    console.log(payload);
+    createPoll(formData);
   };
 
   return (
@@ -105,7 +131,7 @@ const Write = () => {
           ></div>
 
           <div className="Upload" onClick={handleSubmit}>
-            <div>투표 생성하기</div>
+            <div>등록</div>
           </div>
         </div>
 
@@ -162,6 +188,7 @@ const Write = () => {
               <DatePicker
                 className="DatePicker"
                 dateFormat="yyyy.MM.dd"
+                locale={ko}
                 shouldCloseOnSelect
                 minDate={new Date()}
                 selected={selectedDate}
@@ -234,7 +261,7 @@ const Write = () => {
                 <input
                   type="text"
                   className="OptionText"
-                  placeholder={`후보 ${index + 1}`}
+                  placeholder={`${index + 1} 항목입력`}
                   value={option.title}
                   onChange={(e) => handleOptionTitleChange(index, e)}
                 />
@@ -276,7 +303,6 @@ const Write = () => {
             </div>
           </div>
         </div>
-   
       </div>
     </div>
   );

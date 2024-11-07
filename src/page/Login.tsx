@@ -7,7 +7,7 @@ const Login = () => {
 
   const handleLoginClick = (provider: "github" | "kakao"): void => {
     const host = window.location.origin;
-    const redirectUri = `https://api.gollaba.app/oauth2/authorize/${provider}?redirect_uri=${host}/temp/oauth-callback`;
+    const redirectUri = `https://api.gollaba.app/oauth2/authorize/${provider}?redirect_uri=${host}/oauth-callback`;
     window.location.href = redirectUri;
   };
 

@@ -19,7 +19,7 @@
       .TitleInput {
         font-size: 30px;
         font-weight: bold;
-        margin-bottom: 15px;
+        margin-bottom: 30px;
 
         &:empty:before,
         &:focus:empty:before {
@@ -37,7 +37,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 5px 10px;
+        height: fit-content;
+        padding: 10px 20px;
         margin-right: 50px;
         box-sizing: border-box;
         background-color: #478ad1;
@@ -329,7 +330,5 @@
         }
       }
     }
-
-  
   }
 }

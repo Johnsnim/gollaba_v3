@@ -4,6 +4,9 @@ export { default as HelpIcon } from "./Common/help-icon.png";
 export { default as VoteActive } from "./Common/voteIcon-active.png";
 export { default as VoteInactive } from "./Common/voteIcon-inactive.png";
 export { default as Temp } from "./Common/test.png";
+export { default as ImageIcon } from "./Common/image.png";
+export { default as Crown } from "./Common/crown.png";
+export { default as manualVoting } from "./Common/manual-voting.png";
 
 //Header
 export { default as SearchIcon } from "./Header/search.png";
@@ -27,3 +30,4 @@ export { default as MinusButton } from "./Write/Minus-Button.png";
 //Poll
 export { default as ViewIcon } from "./Poll/Eye.png";
 export { default as LeftArrow } from "./Poll/LeftArrow.png";
+export { default as VoteBtn } from "./Poll/votebtn.png";

@@ -1,16 +1,19 @@
 .Poll {
   display: flex;
   justify-content: center;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   width: 100%;
   background-color: #e5f2ff;
   color: #13212c;
 
   .Inner {
     @include CommonInnerStyle;
+    padding-top: 40px;
     padding-left: 64px;
     padding-right: 64px;
     z-index: 3;
+    min-height: 100vh;
 
     .UpperDiv {
       .Title {
@@ -74,8 +77,68 @@
         }
       }
     }
+
+    .SubmitContainer {
+      display: flex;
+      justify-content: center;
+
+      .SubmitButton {
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        padding-block: 0.5rem;
+        padding-inline: 1.25rem;
+        background-color: rgb(0 107 179);
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffff;
+        gap: 8px;
+        font-weight: bold;
+        border: 3px solid #ffffff4d;
+        outline: none;
+        overflow: hidden;
+        font-size: 15px;
+        margin-top: 30px;
+
+        img {
+          height: 20px;
+        }
+
+        &:hover {
+          transform: scale(1.05);
+          border-color: #fff9;
+
+          img {
+            animation: rotate-icon 0.6s ease-in-out;
+          }
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          width: 100px;
+          height: 100%;
+          background-image: linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0) 70%
+          );
+          top: 0;
+          left: -100px;
+          opacity: 0.6;
+        }
+
+        &:hover::before {
+          animation: shine 1.5s ease-out infinite;
+        }
+      }
+    }
     .VerticalLine {
-      background-color: #000;
+      background-color: #fff;
       margin-top: 33px;
       margin-bottom: 33px;
       width: 100%;
@@ -84,9 +147,77 @@
 
     .PollResultContainer {
       background-color: rgba(#d9d9d9, 50%);
-      height: 300px;
+      height: auto;
+      margin: 0px;
       padding: 35px 40px;
       border-radius: 10px;
+      position: relative;
+
+      .card {
+        width: 300px;
+        height: 150px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f8fbfe;
+        border-radius: 8px;
+        z-index: 1;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+
+        .tools {
+          display: flex;
+          align-items: center;
+          padding: 9px;
+          .circle {
+            padding: 0 4px;
+            .box {
+              display: inline-block;
+              align-items: center;
+              width: 10px;
+              height: 10px;
+              padding: 1px;
+              border-radius: 50%;
+            }
+
+            .red {
+              background-color: #ff605c;
+            }
+
+            .yellow {
+              background-color: #ffbd44;
+            }
+
+            .green {
+              background-color: #00ca4e;
+            }
+          }
+        }
+
+        .CardContent {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          height: 60%;
+          font-size: 18px;
+          gap: 5px;
+          img {
+            height: 30px;
+            vertical-align: middle; /* 텍스트와 수평을 맞추기 위해 */
+            margin: 0 2px; /* 텍스트와 이미지 사이 간격 */
+          }
+
+          div {
+            span {
+              font-weight: bold;
+              color: #fd9741;
+            }
+          }
+        }
+      }
 
       .Title {
         font-size: 20px;
@@ -104,6 +235,11 @@
         flex-direction: column;
         justify-content: center;
         height: 100%;
+
+        &.dimmed {
+          filter: blur(10px);
+        }
+
         .ResultOption {
           margin-bottom: 15px;
 
@@ -111,11 +247,35 @@
             color: #808080;
             font-size: 20px;
             font-weight: bold;
+            margin-bottom: 5px;
           }
+
           .OptionPercent {
             width: 100%;
-            height: 15px;
+            height: 20px;
             background-color: #d9d9d9;
+            position: relative;
+
+            .inner-bar {
+              height: 100%;
+              background-color: #4caf50;
+              position: absolute;
+              top: 0;
+              left: 0;
+
+              background-image: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+              );
+              background-size: 20px 20px;
+              animation: moveStripes 1s linear infinite;
+            }
           }
         }
       }
@@ -129,16 +289,22 @@
     margin-top: 25px;
 
     .VoteOption {
+      cursor: pointer;
       display: flex;
       position: relative;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
       width: 450px;
-      height: 200px;
+      height: 220px;
       background-color: #e5f2ff;
       border-radius: 5px;
       filter: drop-shadow(0 2px 3px #808080);
+
+      &.Selected {
+        border: 1px solid orange;
+        box-sizing: border-box;
+      }
 
       &.Max {
         display: none;
@@ -148,7 +314,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 200px;
+        height: 220px;
         background-color: #c4c4c4;
         justify-content: center;
         text-align: center;
@@ -179,6 +345,10 @@
         position: relative;
         height: 80px;
         width: 100%;
+
+        &.Selected {
+          background-color: #fd9741;
+        }
 
         .VoteIcon {
           position: absolute;
@@ -212,5 +382,37 @@
         height: 80px;
       }
     }
+  }
+}
+
+@keyframes moveStripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0px;
+  }
+}
+
+@keyframes rotate-icon {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes shine {
+  0% {
+    left: -100px;
+  }
+
+  60%,
+  100% {
+    left: 100%;
   }
 }

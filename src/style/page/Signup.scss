@@ -1,0 +1,95 @@
+.Signup {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #e5f2ff;
+
+  .SignupInner {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    height: 100%;
+    width: 580px;
+
+    .HomeButton {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      align-items: center;
+      transition: scale 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        scale: 1.05;
+      }
+
+      img {
+        height: 16px;
+        width: 16px;
+      }
+
+      div {
+        margin-left: 5px;
+        color: #c9c9c9;
+        font-size: 15px;
+      }
+    }
+
+    .UpperPartContainer {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+
+      .LoginIcon {
+        width: 230px;
+        height: 250px;
+      }
+
+      .Title {
+        margin-top: 16px;
+        font-size: 40px;
+        letter-spacing: -5%;
+        font-family: "YANGJIN";
+      }
+    }
+
+    .LowerPartContainer {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 60px;
+      gap: 12px;
+
+      input {
+        border: none;
+        border-bottom: 1px solid #7aaee6;
+        width: 70%;
+        height: 30px;
+        font-size: 15px;
+        margin-top: 5px;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .Submit {
+      margin-top: 30px;
+    }
+
+    .Copyright {
+      position: fixed;
+      bottom: 27px;
+      color: #d9d9d9;
+    }
+  }
+}
