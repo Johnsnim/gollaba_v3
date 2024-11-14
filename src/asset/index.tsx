@@ -31,3 +31,9 @@ export { default as MinusButton } from "./Write/Minus-Button.png";
 export { default as ViewIcon } from "./Poll/Eye.png";
 export { default as LeftArrow } from "./Poll/LeftArrow.png";
 export { default as VoteBtn } from "./Poll/votebtn.png";
+
+//MyPage
+export { default as Gear } from "./MyPage/gear.png";
+
+//GoToTopButton
+export { default as TopArrow } from "./GoToTopButton/TopArrow.png";

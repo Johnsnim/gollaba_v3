@@ -29,6 +29,7 @@ const VoteApi = {
 
   chosenItem: async (pollHashId) =>
     api.get(`/v2/voting/me?pollHashId=${pollHashId}`),
+
   updatePoll: async (pollId, payload) =>
     api.post(`v2/polls/${pollId}/update`, payload, {
       headers: { "Content-Type": "multipart/form-data" },

@@ -1,0 +1,77 @@
+.MyPage {
+  display: flex;
+  justify-content: center;
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #e5f2ff;
+  color: #13212c;
+
+  .Inner {
+    @include CommonInnerStyle;
+    justify-content: flex-start;
+    padding-top: 160px;
+    padding-left: 100px;
+    padding-right: 100px;
+    z-index: 3;
+    min-height: 100vh;
+
+    // margin-top: 50px;
+    .TopBox {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      height: fit-content;
+
+      .Profile {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        cursor: pointer;
+        border-radius: 50%;
+        margin-right: 30px;
+      }
+
+      .Detail {
+        .Nickname {
+          font-size: 35px;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+
+          img {
+            cursor: pointer;
+            margin-left: 10px;
+            height: 20px;
+            width: 20px;
+
+            &:hover {
+              animation: scaleUpDown 0.6s;
+            }
+          }
+        }
+
+        .Email {
+          color: #808080;
+        }
+      }
+    }
+
+    .UnderBox {
+      margin-top: 50px;
+    }
+  }
+}
+
+@keyframes scaleUpDown {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

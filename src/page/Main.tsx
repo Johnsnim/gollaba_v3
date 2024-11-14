@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import VoteApi from "../services/vote";
 import { useNavigate } from "react-router-dom";
+import { GoToTopButton } from "../components";
 
 type PollItem = {
   id: number;
@@ -90,6 +91,7 @@ const Main: React.FC = () => {
 
   return (
     <div className="Main">
+      <GoToTopButton />
       <div className="Inner">
         {/* 오늘의 투표 */}
         <div className="PollsContainer">
@@ -104,11 +106,15 @@ const Main: React.FC = () => {
                 <div className="Top">
                   <div className="Description">
                     <div className="Title">{poll.title}</div>
-                    <div className="Detail">{`${poll.creatorName} · ${new Date(
+                    <div className="Detail">{`${new Date(
                       poll.endAt
                     ).toLocaleDateString()} 마감`}</div>
                   </div>
-                  <div className="Now">
+                  <div
+                    className={`Now ${
+                      new Date(poll.endAt) < new Date() ? "Expired" : ""
+                    }`}
+                  >
                     {new Date(poll.endAt) < new Date() ? "종료됨" : "진행 중"}
                   </div>
                 </div>
@@ -139,11 +145,15 @@ const Main: React.FC = () => {
                 <div className="Top">
                   <div className="Description">
                     <div className="Title">{poll.title}</div>
-                    <div className="Detail">{`${poll.creatorName} · ${new Date(
+                    <div className="Detail">{`${new Date(
                       poll.endAt
                     ).toLocaleDateString()} 마감`}</div>
                   </div>
-                  <div className="Now">
+                  <div
+                    className={`Now ${
+                      new Date(poll.endAt) < new Date() ? "Expired" : ""
+                    }`}
+                  >
                     {new Date(poll.endAt) < new Date() ? "종료됨" : "진행 중"}
                   </div>
                 </div>
@@ -175,11 +185,15 @@ const Main: React.FC = () => {
                 <div className="Top">
                   <div className="Description">
                     <div className="Title">{poll.title}</div>
-                    <div className="Detail">{`${poll.creatorName} · ${new Date(
+                    <div className="Detail">{`${new Date(
                       poll.endAt
                     ).toLocaleDateString()} 마감`}</div>
                   </div>
-                  <div className="Now">
+                  <div
+                    className={`Now ${
+                      new Date(poll.endAt) < new Date() ? "Expired" : ""
+                    }`}
+                  >
                     {new Date(poll.endAt) < new Date() ? "종료됨" : "진행 중"}
                   </div>
                 </div>

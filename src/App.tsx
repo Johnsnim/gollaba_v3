@@ -2,14 +2,23 @@ import React from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./style/index.scss";
-import { Login, Main, OauthCallback, Poll, Signup, Write } from "./page";
-import { Header } from "./components";
+import {
+  Login,
+  Main,
+  MyPage,
+  OauthCallback,
+  Poll,
+  Signup,
+  Write,
+} from "./page";
+import { Header, ScrollToTop } from "./components";
 
 function App() {
   return (
     <div className="App">
       <RecoilRoot>
         <BrowserRouter>
+          <ScrollToTop />
           <Header />
           <Routes>
             <Route path="/" element={<Main />} />
@@ -18,6 +27,7 @@ function App() {
             <Route path="/write" element={<Write />} />
             <Route path="/poll/:pollId" element={<Poll />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/my" element={<MyPage />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

@@ -95,14 +95,17 @@ const Write = () => {
     formData.append("userId", "null");
     formData.append("creatorName", "홍길동");
     formData.append("title", title);
-    formData.append("responseType", isSingle ? "single" : "multi");
-    formData.append("isBallot", isAnon ? "Anonymous" : "Named");
-    formData.append("endedAt", selectedDate ? selectedDate.toISOString() : "");
+    formData.append("responseType", isSingle ? "SINGLE" : "MULTI");
+    formData.append("pollType", isAnon ? "ANONYMOUS" : "NAMED");
+    formData.append(
+      "endAt",
+      selectedDate ? selectedDate.toISOString().split(".")[0] : ""
+    );
 
     voteOptions.forEach((option, index) => {
-      formData.append(`options[${index}][title]`, option.title);
+      formData.append(`items[${index}].description`, option.title);
       if (option.imageUrl) {
-        formData.append(`options[${index}][imageUrl]`, option.imageUrl);
+        formData.append(`items[${index}].imageUrl`, option.imageUrl);
       }
     });
 

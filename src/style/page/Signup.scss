@@ -58,6 +58,10 @@
         letter-spacing: -5%;
         font-family: "YANGJIN";
       }
+
+      .Text {
+        margin-top: 10px;
+      }
     }
 
     .LowerPartContainer {
@@ -75,6 +79,7 @@
         height: 30px;
         font-size: 15px;
         margin-top: 5px;
+        background-color: transparent;
 
         &:focus {
           outline: none;
@@ -83,7 +88,21 @@
     }
 
     .Submit {
+      cursor: pointer;
       margin-top: 30px;
+      padding: 5px 10px;
+      font-size: 18px;
+      background: linear-gradient(to right, #3b82f6, #2563eb, #1e40af);
+      color: #fff;
+      font-weight: bold;
+      font-family: "SUIT";
+      border: 0;
+      border-radius: 5px;
+      transition: scale 0.3s;
+
+      &:hover {
+        scale: 1.2;
+      }
     }
 
     .Copyright {

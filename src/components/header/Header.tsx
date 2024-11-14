@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Logo, SearchIcon } from "../../asset";
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode"; // 'jwt-decode' 패키지는 기본적으로 default export 사용
+import { jwtDecode } from "jwt-decode";
 import UserApi from "../../services/user";
 
 interface UserInfo {
@@ -23,10 +23,9 @@ const Header = () => {
       if (token !== null) {
         console.log("토큰 있음!", token);
         setIsToken(true);
-        // 토큰이 유효한 경우 유저 정보를 불러옵니다.
         try {
           const userInfo = await UserApi.showUser(token);
-          setUserInfo(userInfo.data.data); // 데이터에 접근하여 상태에 설정합니다.
+          setUserInfo(userInfo.data.data);
         } catch (error) {
           console.error("유저 정보 불러오기 실패:", error);
         }
@@ -34,7 +33,7 @@ const Header = () => {
     };
 
     checkToken();
-  }, []); // 'isToken'을 의존성 배열에서 제거, 토큰 검사는 한 번만 실행
+  }, []);
 
   console.log("체크>", userInfo);
 
@@ -90,7 +89,12 @@ const Header = () => {
               로그인
             </div>
           ) : (
-            <div className="MypageBtn">
+            <div
+              className="MypageBtn"
+              onClick={() => {
+                nav("/my");
+              }}
+            >
               <img className="ProfileImage" src={userInfo?.profileImageUrl} />
               <div className="Nickname">{userInfo?.name || "닉네임"}</div>
             </div>

@@ -40,8 +40,11 @@ type Params = {
 };
 
 const Poll: React.FC = () => {
-  //임시 체크용 변수
-  const tempFlag = false;
+  //투표 여부 확인용 변수
+  const [tempFlag, setTempFlag] = useState(false);
+
+  //투표 마감 여부 확인용 변수
+  const [isExpired, setIsExpired] = useState(false);
 
   const [voteOptions, setVoteOptions] = useState<PollItem[]>([]);
   const [data, setData] = useState<PollData | null>(null);
@@ -52,29 +55,95 @@ const Poll: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log("아이디", pollId);
-
-    const fetchPollData = async () => {
+    const fetchPollDataAndVoteCheck = async () => {
       try {
         const response = await VoteApi.getPoll(pollId);
         if (response.status === 200) {
           console.log("Fetched Poll Data:", response.data.data);
-          console.log("Vote Options:", response.data.data.items);
-          setData(response.data.data);
-          setVoteOptions(response.data.data.items || []);
+          const pollData = response.data.data;
+          setData(pollData);
+          setVoteOptions(pollData.items || []);
+
+          const isExpiredNow = new Date(pollData.endAt) < new Date();
+          setIsExpired(isExpiredNow);
+
+          if (isExpiredNow) {
+            setTempFlag(true);
+          } else {
+            const voteResponse = await VoteApi.isVoted({ pollHashId: pollId });
+            if (
+              voteResponse.status === 200 &&
+              voteResponse.data.data === true
+            ) {
+              setTempFlag(true);
+            } else {
+              setTempFlag(false);
+            }
+          }
         }
       } catch (error) {
-        console.error("Failed to fetch trending polls", error);
+        console.error(
+          "Failed to fetch poll data or check voting status",
+          error
+        );
       }
     };
-    fetchPollData();
+
+    fetchPollDataAndVoteCheck();
   }, [pollId]);
 
   const handleOptionClick = (index: number) => {
+    if (isExpired) return;
+
     if (selectedOptionIndex === index) {
-      setSelectedOptionIndex(null); // 이미 선택된 옵션을 다시 클릭하면 선택 해제
+      setSelectedOptionIndex(null);
     } else {
-      setSelectedOptionIndex(index); // 새로운 옵션 선택
+      setSelectedOptionIndex(index);
+    }
+  };
+
+  const ClickVoteButton = async () => {
+    if (selectedOptionIndex === null) {
+      alert("옵션을 선택해주세요.");
+      return;
+    }
+
+    const selectedOption = voteOptions[selectedOptionIndex];
+
+    if (!selectedOption) {
+      alert("유효한 옵션을 선택해주세요.");
+      return;
+    }
+
+    try {
+      const payload = {
+        pollHashId: pollId,
+        pollItemIds: [selectedOption.id],
+        voterName: "test",
+      };
+
+      let response;
+
+      if (tempFlag) {
+        let chosen = await VoteApi.chosenItem(pollId);
+
+        console.log("test", chosen.data.data.id);
+
+        response = await VoteApi.voteEdit(chosen.data.data.id, {
+          pollItemIds: [selectedOption.id],
+        });
+      } else {
+        response = await VoteApi.vote(payload);
+      }
+
+      if (response.status === 200) {
+        alert(tempFlag ? "투표가 수정되었습니다." : "투표가 완료되었습니다.");
+        setTempFlag(true);
+      } else {
+        console.error("Failed to submit vote", response);
+      }
+    } catch (error) {
+      console.error("Failed to submit vote", error);
     }
   };
 
@@ -182,10 +251,25 @@ const Poll: React.FC = () => {
           )}
         </div>
         <div className="SubmitContainer">
-          <button className="SubmitButton">
-            <img src={manualVoting} alt="vote" />
-            투표하기
-          </button>
+          {isExpired ? (
+            <button
+              className="SubmitButton"
+              style={{ backgroundColor: "#a6a6a6" }}
+            >
+              <img src={manualVoting} alt="vote" />
+              이미 종료된 투표입니다.
+            </button>
+          ) : tempFlag ? (
+            <button className="SubmitButton" onClick={ClickVoteButton}>
+              <img src={manualVoting} alt="vote" />
+              재투표하기
+            </button>
+          ) : (
+            <button className="SubmitButton" onClick={ClickVoteButton}>
+              <img src={manualVoting} alt="vote" />
+              투표하기
+            </button>
+          )}
         </div>
         <div className="VerticalLine"></div>
 

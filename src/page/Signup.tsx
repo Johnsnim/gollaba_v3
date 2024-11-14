@@ -101,6 +101,8 @@ const Signup = () => {
               height: 120,
               objectFit: "cover",
               cursor: "pointer",
+              borderRadius: "50%",
+              marginTop: "20px",
             }}
             onClick={handleClick}
           />
@@ -112,13 +114,14 @@ const Signup = () => {
             onChange={changeProfile}
             ref={photoInput}
           />
+
+          <div className="Text">클릭해서 원하는 이미지로 교체할 수 있어요.</div>
         </div>
 
         <div className="LowerPartContainer">
-          {/* 기본 값을 쿼리에서 가져온 데이터로 설정 */}
           <input
             type="text"
-            placeholder="아이디 *"
+            placeholder="가입 이메일 *"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled
@@ -129,8 +132,6 @@ const Signup = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <input type="password" placeholder="비밀번호 *" />
-          <input type="password" placeholder="비밀번호 확인 *" />
         </div>
 
         <button className="Submit" onClick={signup}>

@@ -9,11 +9,13 @@
 
   .Inner {
     @include CommonInnerStyle;
-    padding-top: 40px;
+    justify-content: flex-start;
+    padding-top: 80px;
     padding-left: 64px;
     padding-right: 64px;
     z-index: 3;
     min-height: 100vh;
+    // margin-top: 50px;
 
     .UpperDiv {
       .Title {
@@ -206,8 +208,8 @@
           gap: 5px;
           img {
             height: 30px;
-            vertical-align: middle; /* 텍스트와 수평을 맞추기 위해 */
-            margin: 0 2px; /* 텍스트와 이미지 사이 간격 */
+            vertical-align: middle;
+            margin: 0 2px;
           }
 
           div {
