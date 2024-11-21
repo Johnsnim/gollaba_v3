@@ -31,9 +31,14 @@ export { default as MinusButton } from "./Write/Minus-Button.png";
 export { default as ViewIcon } from "./Poll/Eye.png";
 export { default as LeftArrow } from "./Poll/LeftArrow.png";
 export { default as VoteBtn } from "./Poll/votebtn.png";
+export { default as Leaderboard } from "./Poll/leaderboard.png";
+export { default as SilverCrown } from "./Poll/2ndCrown.png";
+export { default as BronzeCrown } from "./Poll/3rdCrown.png";
 
 //MyPage
 export { default as Gear } from "./MyPage/gear.png";
+export { default as Cancel } from "./MyPage/cancel.png";
+export { default as Check } from "./MyPage/check.png";
 
 //GoToTopButton
 export { default as TopArrow } from "./GoToTopButton/TopArrow.png";

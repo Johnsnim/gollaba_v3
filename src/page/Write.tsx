@@ -86,7 +86,7 @@ const Write = () => {
     title: string;
     responseType: string;
     isBallot: string;
-    options: { imageUrl: string | null; title: string }[];
+    options: { imageUrl: BinaryData | null; title: string }[];
     endedAt: Date | null;
   }
 
@@ -105,7 +105,7 @@ const Write = () => {
     voteOptions.forEach((option, index) => {
       formData.append(`items[${index}].description`, option.title);
       if (option.imageUrl) {
-        formData.append(`items[${index}].imageUrl`, option.imageUrl);
+        formData.append(`items[${index}].image`, option.imageUrl);
       }
     });
 

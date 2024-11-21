@@ -154,129 +154,191 @@
       padding: 35px 40px;
       border-radius: 10px;
       position: relative;
+      display: flex;
+      flex-direction: row;
 
-      .card {
-        width: 300px;
-        height: 150px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #f8fbfe;
-        border-radius: 8px;
-        z-index: 1;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      .LeftSide {
+        display: flex;
+        flex-direction: column;
+        flex: 8;
 
-        .tools {
-          display: flex;
-          align-items: center;
-          padding: 9px;
-          .circle {
-            padding: 0 4px;
-            .box {
-              display: inline-block;
-              align-items: center;
-              width: 10px;
-              height: 10px;
-              padding: 1px;
-              border-radius: 50%;
+        .card {
+          width: 300px;
+          height: 150px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #f8fbfe;
+          border-radius: 8px;
+          z-index: 1;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+
+          .tools {
+            display: flex;
+            align-items: center;
+            padding: 9px;
+            .circle {
+              padding: 0 4px;
+              .box {
+                display: inline-block;
+                align-items: center;
+                width: 10px;
+                height: 10px;
+                padding: 1px;
+                border-radius: 50%;
+              }
+
+              .red {
+                background-color: #ff605c;
+              }
+
+              .yellow {
+                background-color: #ffbd44;
+              }
+
+              .green {
+                background-color: #00ca4e;
+              }
+            }
+          }
+
+          .CardContent {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            height: 60%;
+            font-size: 18px;
+            gap: 5px;
+            img {
+              height: 30px;
+              vertical-align: middle;
+              margin: 0 2px;
             }
 
-            .red {
-              background-color: #ff605c;
-            }
-
-            .yellow {
-              background-color: #ffbd44;
-            }
-
-            .green {
-              background-color: #00ca4e;
+            div {
+              span {
+                font-weight: bold;
+                color: #fd9741;
+              }
             }
           }
         }
 
-        .CardContent {
+        .Title {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 20px;
+
+          img {
+            height: 15px;
+            margin-right: 5px;
+          }
+        }
+
+        .ResultOptions {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          align-items: center;
-          text-align: center;
-          width: 100%;
-          height: 60%;
-          font-size: 18px;
-          gap: 5px;
-          img {
-            height: 30px;
-            vertical-align: middle;
-            margin: 0 2px;
+          height: 100%;
+
+          &.dimmed {
+            filter: blur(10px);
           }
 
-          div {
-            span {
+          .ResultOption {
+            margin-bottom: 15px;
+
+            .OptionName {
+              color: #808080;
+              font-size: 20px;
               font-weight: bold;
-              color: #fd9741;
+              margin-bottom: 5px;
+            }
+
+            .OptionPercent {
+              width: 100%;
+              height: 20px;
+              background-color: #d9d9d9;
+              position: relative;
+
+              .inner-bar {
+                height: 100%;
+                background-color: #4caf50;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                background-image: linear-gradient(
+                  45deg,
+                  rgba(255, 255, 255, 0.2) 25%,
+                  transparent 25%,
+                  transparent 50%,
+                  rgba(255, 255, 255, 0.2) 50%,
+                  rgba(255, 255, 255, 0.2) 75%,
+                  transparent 75%,
+                  transparent
+                );
+                background-size: 20px 20px;
+                animation: moveStripes 1s linear infinite;
+              }
             }
           }
         }
       }
 
-      .Title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 20px;
-
-        img {
-          height: 15px;
-          margin-right: 5px;
-        }
-      }
-
-      .ResultOptions {
+      .RightSide {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        height: 100%;
+        flex: 1.8;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: rgba(#478ad1, 0.1);
+        padding: 20px;
+        box-sizing: border-box;
 
-        &.dimmed {
-          filter: blur(10px);
+        .Title {
+          display: flex;
+          flex-direction: row;
+          border-bottom: 1px solid #478ad1;
+          width: 100%;
+          height: fit-content;
+          padding-bottom: 3px;
+          margin-bottom: 10px;
+          img {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+          }
         }
 
-        .ResultOption {
-          margin-bottom: 15px;
-
-          .OptionName {
-            color: #808080;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-          }
-
-          .OptionPercent {
+        .Leaderboard {
+          .Rank {
+            display: flex;
             width: 100%;
-            height: 20px;
-            background-color: #d9d9d9;
-            position: relative;
+            justify-content: space-between;
+            align-items: center;
 
-            .inner-bar {
-              height: 100%;
-              background-color: #4caf50;
-              position: absolute;
-              top: 0;
-              left: 0;
+            .Name {
+              display: flex;
+              img {
+                width: 18px;
+                height: 18px;
+                margin-right: 5px;
+              }
 
-              background-image: linear-gradient(
-                45deg,
-                rgba(255, 255, 255, 0.2) 25%,
-                transparent 25%,
-                transparent 50%,
-                rgba(255, 255, 255, 0.2) 50%,
-                rgba(255, 255, 255, 0.2) 75%,
-                transparent 75%,
-                transparent
-              );
-              background-size: 20px 20px;
-              animation: moveStripes 1s linear infinite;
+              .RankNumber {
+                margin-right: 10px;
+                color: #ffb743;
+              }
+
+              .Number {
+                font-size: 12px;
+                margin-right: 5px;
+              }
             }
           }
         }

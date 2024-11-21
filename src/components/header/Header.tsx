@@ -29,10 +29,25 @@ const Header = () => {
         } catch (error) {
           console.error("유저 정보 불러오기 실패:", error);
         }
+      } else {
+        setIsToken(false);
+        setUserInfo(null);
       }
     };
 
     checkToken();
+  }, [loc.pathname]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const token = getToken();
+      setIsToken(token !== null);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   console.log("체크>", userInfo);

@@ -35,6 +35,7 @@ const Main: React.FC = () => {
   const nav = useNavigate();
 
   const [polls, setPolls] = useState<Poll[]>([]);
+  const [trendingPolls, setTrendingPolls] = useState<Poll[]>([]);
   const [allPolls, setAllPolls] = useState<Poll[]>([]);
   const [page, setPage] = useState(0);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -44,6 +45,15 @@ const Main: React.FC = () => {
       try {
         const response = await VoteApi.topPolls();
         setPolls(response.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch trending polls", error);
+      }
+    };
+
+    const fetchTrendingPolls = async () => {
+      try {
+        const response = await VoteApi.trendingPolls();
+        setTrendingPolls(response.data.data || []);
       } catch (error) {
         console.error("Failed to fetch trending polls", error);
       }
@@ -61,6 +71,7 @@ const Main: React.FC = () => {
     };
 
     fetchTopPolls();
+    fetchTrendingPolls();
     fetchInitialAllPolls();
   }, []);
 
@@ -136,7 +147,7 @@ const Main: React.FC = () => {
         <div className="PollsContainer">
           <div className="TitleBox">인기 투표</div>
           <div className="PollsBox">
-            {polls.map((poll) => (
+            {trendingPolls.map((poll) => (
               <div
                 className="IndividualPoll"
                 key={poll.id}

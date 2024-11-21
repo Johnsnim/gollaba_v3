@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
   AnonymousIcon,
+  BronzeCrown,
   Crown,
   ImageIcon,
+  Leaderboard,
   LeftArrow,
   manualVoting,
   MinusButton,
   MultipleVote,
   PlusIcon,
+  SilverCrown,
   Temp,
   ViewIcon,
   VoteActive,
@@ -210,8 +213,6 @@ const Poll: React.FC = () => {
                       src={option.imageUrl}
                       alt={`OptionImage${index + 1}`}
                       style={{
-                        width: "100%",
-                        height: "100%",
                         objectFit: "cover",
                       }}
                     />
@@ -299,37 +300,75 @@ const Poll: React.FC = () => {
               </div>
             </div>
           )}
-          <div className="Title">
-            <img src={LeftArrow} alt="Arrow" />
-            투표 결과
+
+          <div className="LeftSide">
+            <div className="Title">
+              <img src={LeftArrow} alt="Arrow" />
+              투표 결과
+            </div>
+            <div className={`ResultOptions  ${tempFlag ? "" : "dimmed"}`}>
+              {voteOptions &&
+                voteOptions.length > 0 &&
+                voteOptions.map((option, index) => (
+                  <div className="ResultOption" key={`result-option-${index}`}>
+                    <div className="OptionName">
+                      {option.description}
+                      {" - "}
+                      {(
+                        (option.votingCount / (data.totalVotingCount || 1)) *
+                        100
+                      ).toFixed(1)}
+                      %
+                    </div>
+                    <div className="OptionPercent">
+                      <div
+                        className="inner-bar"
+                        style={{
+                          width: `${(
+                            (option.votingCount /
+                              (data.totalVotingCount || 1)) *
+                            100
+                          ).toFixed(1)}%`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
-          <div className={`ResultOptions  ${tempFlag ? "" : "dimmed"}`}>
-            {voteOptions &&
-              voteOptions.length > 0 &&
-              voteOptions.map((option, index) => (
-                <div className="ResultOption" key={`result-option-${index}`}>
-                  <div className="OptionName">
-                    {option.description}
-                    {" - "}
-                    {(
-                      (option.votingCount / (data.totalVotingCount || 1)) *
-                      100
-                    ).toFixed(1)}
-                    %
+          <div className="RightSide">
+            <div className="Title">
+              <img src={Leaderboard} alt="Rank" />
+              순위
+            </div>
+
+            <div className="Leaderboard">
+              {voteOptions
+                .sort((a, b) => b.votingCount - a.votingCount)
+                .map((option, index) => (
+                  <div className="Rank" key={`rank-${index}`}>
+                    <div className="Name">
+                      {index === 0 ? (
+                        <img src={Crown} alt="Crown" />
+                      ) : index === 1 ? (
+                        <img src={SilverCrown} alt="SilverCrown" />
+                      ) : index === 2 ? (
+                        <img src={BronzeCrown} alt="BronzeCrown" />
+                      ) : (
+                        <div className="Number">{index + 1}위</div>
+                      )}
+                      {option.description}
+                    </div>
+                    <div className="Percent">
+                      {(
+                        (option.votingCount / (data.totalVotingCount || 1)) *
+                        100
+                      ).toFixed(1)}
+                      %
+                    </div>
                   </div>
-                  <div className="OptionPercent">
-                    <div
-                      className="inner-bar"
-                      style={{
-                        width: `${(
-                          (option.votingCount / (data.totalVotingCount || 1)) *
-                          100
-                        ).toFixed(1)}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         </div>
       </div>

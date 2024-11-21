@@ -43,7 +43,7 @@ const VoteApi = {
   topPolls: async () => api.get(`/v2/polls/top?limit=5`),
 
   //트렌딩 투표
-  trendingPolls: async () => api.get(`/v2/polls/trending?limit=20`),
+  trendingPolls: async () => api.get(`/v2/polls/trending?limit=5`),
 };
 
 export default VoteApi;
