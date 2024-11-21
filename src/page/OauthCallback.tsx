@@ -23,13 +23,6 @@ export default function OAuth2CallbackPage() {
     const providerType = queryParams.get("providerType");
     const profileImageUrl = queryParams.get("profileImageUrl");
 
-    // 필수 값 없을 경우 back
-    if (!email || !email.trim() || !providerId || !providerType) {
-      alert("회원가입에 필요한 필수 값이 없습니다. 관리자에게 문의하세요.");
-      navigate("/login");
-      return;
-    }
-
     navigate({ pathname: "/signup", search: location.search });
   }, [location, navigate]);
 

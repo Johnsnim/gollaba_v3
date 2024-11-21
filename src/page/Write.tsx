@@ -16,7 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import VoteApi from "../services/vote";
 
 interface VoteOption {
-  imageUrl: string | null;
+  imageFile: File | null;
   title: string;
 }
 
@@ -26,12 +26,12 @@ const Write = () => {
   const [isSingle, setIsSingle] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [voteOptions, setVoteOptions] = useState<VoteOption[]>([
-    { imageUrl: null, title: "" },
-    { imageUrl: null, title: "" },
+    { imageFile: null, title: "" },
+    { imageFile: null, title: "" },
   ]);
 
   const addVoteOption = () => {
-    setVoteOptions([...voteOptions, { imageUrl: null, title: "" }]);
+    setVoteOptions([...voteOptions, { imageFile: null, title: "" }]);
   };
 
   const removeVoteOption = (index: number) => {
@@ -52,13 +52,9 @@ const Write = () => {
         : (event as React.ChangeEvent<HTMLInputElement>).target.files?.[0];
 
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const updatedOptions = [...voteOptions];
-        updatedOptions[index].imageUrl = reader.result as string | null;
-        setVoteOptions(updatedOptions);
-      };
-      reader.readAsDataURL(file);
+      const updatedOptions = [...voteOptions];
+      updatedOptions[index].imageFile = file;
+      setVoteOptions(updatedOptions);
     }
   };
 
@@ -80,16 +76,6 @@ const Write = () => {
     e.stopPropagation();
   };
 
-  interface Payload {
-    userId: number | null;
-    creatorName: string;
-    title: string;
-    responseType: string;
-    isBallot: string;
-    options: { imageUrl: BinaryData | null; title: string }[];
-    endedAt: Date | null;
-  }
-
   const handleSubmit = (): void => {
     const formData = new FormData();
     formData.append("userId", "null");
@@ -104,8 +90,8 @@ const Write = () => {
 
     voteOptions.forEach((option, index) => {
       formData.append(`items[${index}].description`, option.title);
-      if (option.imageUrl) {
-        formData.append(`items[${index}].image`, option.imageUrl);
+      if (option.imageFile) {
+        formData.append(`items[${index}].image`, option.imageFile);
       }
     });
 
@@ -239,9 +225,9 @@ const Write = () => {
                   onDragEnter={preventDefault}
                   onDragLeave={preventDefault}
                 >
-                  {option.imageUrl ? (
+                  {option.imageFile ? (
                     <img
-                      src={option.imageUrl}
+                      src={URL.createObjectURL(option.imageFile)}
                       alt={`OptionImage${index + 1}`}
                       style={{
                         width: "100%",
