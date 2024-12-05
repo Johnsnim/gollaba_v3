@@ -3,12 +3,41 @@ import { HomeIcon, Logo } from "../asset";
 import { useEffect, useState, useRef } from "react";
 import UserApi from "../services/user";
 
+const Modal: React.FC<{ message: string; onClose: () => void }> = ({
+  message,
+  onClose,
+}) => {
+  return (
+    <div className="ModalBackdrop" onClick={onClose}>
+      <div className="card">
+        <div className="tools">
+          <div className="circle">
+            <span className="red box"></span>
+          </div>
+          <div className="circle">
+            <span className="yellow box"></span>
+          </div>
+          <div className="circle">
+            <span className="green box"></span>
+          </div>
+        </div>
+        <div className="CardContent">
+          <div>{message}</div>
+          <button onClick={onClose}>확인</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Signup = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const photoInput = useRef<HTMLInputElement | null>(null);
   const imagePayload = useRef<File | null>(null);
 
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [providerId, setProviderId] = useState("");
@@ -60,6 +89,10 @@ const Signup = () => {
   };
 
   const signup = async () => {
+    if (email.length == 0) {
+      setModalMessage("이메일을 기입해주세요.");
+      setOpenModal(true);
+    }
     const payload = {
       email: email,
       name: name,
@@ -124,7 +157,7 @@ const Signup = () => {
             placeholder="가입 이메일 *"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled
+            disabled={!!email}
           />
           <input
             type="text"

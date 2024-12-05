@@ -11,6 +11,7 @@ import {
   VoteInactive,
 } from "../asset";
 import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 import { ko } from "date-fns/locale/ko";
 import "react-datepicker/dist/react-datepicker.css";
 import VoteApi from "../services/vote";
@@ -20,11 +21,45 @@ interface VoteOption {
   title: string;
 }
 
+const Modal: React.FC<{ message: string; onClose: () => void }> = ({
+  message,
+  onClose,
+}) => {
+  return (
+    <div className="ModalBackdrop" onClick={onClose}>
+      <div className="card">
+        <div className="tools">
+          <div className="circle">
+            <span className="red box"></span>
+          </div>
+          <div className="circle">
+            <span className="yellow box"></span>
+          </div>
+          <div className="circle">
+            <span className="green box"></span>
+          </div>
+        </div>
+        <div className="CardContent">
+          <div>{message}</div>
+          <button onClick={onClose}>확인</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Write = () => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [isAnon, setIsAnon] = useState<boolean>(true);
   const [isSingle, setIsSingle] = useState<boolean>(true);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(() => {
+    const now = new Date();
+    const nextHour = new Date(now.setHours(now.getHours() + 2));
+    nextHour.setMinutes(0, 0, 0);
+    return nextHour;
+  });
   const [voteOptions, setVoteOptions] = useState<VoteOption[]>([
     { imageFile: null, title: "" },
     { imageFile: null, title: "" },
@@ -77,16 +112,44 @@ const Write = () => {
   };
 
   const handleSubmit = (): void => {
+    if (selectedDate) {
+      const now = new Date();
+      const oneHourLater = new Date(now.setHours(now.getHours() + 1));
+      if (selectedDate < oneHourLater) {
+        setModalMessage("투표시간은 최소 1시간입니다.");
+        setOpenModal(true);
+        return;
+      }
+    }
+
+    if (title.length == 0) {
+      setModalMessage("투표 제목을 입력해주세요.");
+      setOpenModal(true);
+      return;
+    }
+
+    const emptyOption = voteOptions.find(
+      (option) => option.title.trim() === ""
+    );
+    if (emptyOption) {
+      setModalMessage("모든 항목에 제목을 기입해주세요.");
+      setOpenModal(true);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("userId", "null");
     formData.append("creatorName", "홍길동");
     formData.append("title", title);
-    formData.append("responseType", isSingle ? "SINGLE" : "MULTI");
+    formData.append("responseType", isSingle ? "SINGLE" : "MULTIPLE");
     formData.append("pollType", isAnon ? "ANONYMOUS" : "NAMED");
-    formData.append(
-      "endAt",
-      selectedDate ? selectedDate.toISOString().split(".")[0] : ""
-    );
+
+    if (selectedDate) {
+      const localDateString = format(selectedDate, "yyyy-MM-dd'T'HH:mm:ss", {
+        locale: ko,
+      });
+      formData.append("endAt", localDateString);
+    }
 
     voteOptions.forEach((option, index) => {
       formData.append(`items[${index}].description`, option.title);
@@ -109,6 +172,10 @@ const Write = () => {
 
   return (
     <div className="Write">
+      {openModal && (
+        <Modal message={modalMessage} onClose={() => setOpenModal(false)} />
+      )}
+
       <div className="Inner">
         <div className="UpperDiv">
           <div
@@ -176,12 +243,22 @@ const Write = () => {
               <img src={DateIcon} alt="DateIcon" className="OptionIcon" />
               <DatePicker
                 className="DatePicker"
-                dateFormat="yyyy.MM.dd"
+                dateFormat="yyyy.MM.dd HH:mm"
                 locale={ko}
-                shouldCloseOnSelect
-                minDate={new Date()}
+                shouldCloseOnSelect={false}
+                minDate={
+                  new Date(new Date().setHours(new Date().getHours() + 1))
+                }
+                minTime={
+                  new Date(new Date().setHours(new Date().getHours() + 1))
+                }
+                maxTime={new Date(new Date().setHours(23, 59))}
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={30}
+                timeCaption="시간"
               />
             </div>
           </div>

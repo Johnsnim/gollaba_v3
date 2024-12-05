@@ -11,6 +11,7 @@ import {
   MultipleVote,
   PlusIcon,
   SilverCrown,
+  SingleVote,
   Temp,
   ViewIcon,
   VoteActive,
@@ -19,6 +20,7 @@ import {
 } from "../asset";
 import VoteApi from "../services/vote";
 import { useParams } from "react-router-dom";
+import UserApi from "../services/user";
 
 type PollData = {
   id: string;
@@ -53,9 +55,20 @@ const Poll: React.FC = () => {
   const [data, setData] = useState<PollData | null>(null);
   const { pollId } = useParams<Params>();
 
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(
-    null
+  const [selectedOptionIndexes, setSelectedOptionIndexes] = useState<number[]>(
+    []
   );
+
+  useEffect(() => {
+    const fetchViewCount = async () => {
+      try {
+        const response = await UserApi.readCount(pollId);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchViewCount();
+  }, [pollId]);
 
   useEffect(() => {
     const fetchPollDataAndVoteCheck = async () => {
@@ -98,22 +111,34 @@ const Poll: React.FC = () => {
   const handleOptionClick = (index: number) => {
     if (isExpired) return;
 
-    if (selectedOptionIndex === index) {
-      setSelectedOptionIndex(null);
-    } else {
-      setSelectedOptionIndex(index);
+    if (data?.responseType === "SINGLE") {
+      if (selectedOptionIndexes.includes(index)) {
+        setSelectedOptionIndexes([]);
+      } else {
+        setSelectedOptionIndexes([index]);
+      }
+    } else if (data?.responseType === "MULTIPLE") {
+      if (selectedOptionIndexes.includes(index)) {
+        setSelectedOptionIndexes((prevIndexes) =>
+          prevIndexes.filter((i) => i !== index)
+        );
+      } else {
+        setSelectedOptionIndexes((prevIndexes) => [...prevIndexes, index]);
+      }
     }
   };
 
   const ClickVoteButton = async () => {
-    if (selectedOptionIndex === null) {
+    if (selectedOptionIndexes.length === 0) {
       alert("옵션을 선택해주세요.");
       return;
     }
 
-    const selectedOption = voteOptions[selectedOptionIndex];
+    const selectedOptions = selectedOptionIndexes.map(
+      (index) => voteOptions[index]
+    );
 
-    if (!selectedOption) {
+    if (selectedOptions.length === 0) {
       alert("유효한 옵션을 선택해주세요.");
       return;
     }
@@ -121,7 +146,7 @@ const Poll: React.FC = () => {
     try {
       const payload = {
         pollHashId: pollId,
-        pollItemIds: [selectedOption.id],
+        pollItemIds: selectedOptions.map((option) => option.id),
         voterName: "test",
       };
 
@@ -133,7 +158,7 @@ const Poll: React.FC = () => {
         console.log("test", chosen.data.data.id);
 
         response = await VoteApi.voteEdit(chosen.data.data.id, {
-          pollItemIds: [selectedOption.id],
+          pollItemIds: selectedOptions.map((option) => option.id),
         });
       } else {
         response = await VoteApi.vote(payload);
@@ -185,16 +210,19 @@ const Poll: React.FC = () => {
             />
             <div>{data.pollType === "ANONYMOUS" ? "익명투표" : "복수투표"}</div>
           </div>
-          {data.responseType === "MULTIPLE" && (
-            <div className="Option">
-              <img
-                src={MultipleVote}
-                alt="MultipleVoteIcon"
-                className="OptionIcon"
-              />
+
+          <div className="Option">
+            <img
+              src={data.responseType === "MULTIPLE" ? MultipleVote : SingleVote}
+              alt="MultipleVoteIcon"
+              className="OptionIcon"
+            />
+            {data.responseType === "MULTIPLE" ? (
               <div>복수투표</div>
-            </div>
-          )}
+            ) : (
+              <div>단일투표</div>
+            )}
+          </div>
         </div>
 
         <div className="VoteOptionArea">
@@ -202,7 +230,7 @@ const Poll: React.FC = () => {
             voteOptions.map((option, index) => (
               <div
                 className={`VoteOption ${
-                  selectedOptionIndex === index ? "Selected" : ""
+                  selectedOptionIndexes.includes(index) ? "Selected" : ""
                 }`}
                 key={`option-${index}`}
                 onClick={() => handleOptionClick(index)}
@@ -233,12 +261,14 @@ const Poll: React.FC = () => {
 
                 <div
                   className={`OptionDetail  ${
-                    selectedOptionIndex === index ? "Selected" : ""
+                    selectedOptionIndexes.includes(index) ? "Selected" : ""
                   }`}
                 >
                   <img
                     src={
-                      selectedOptionIndex !== index ? VoteInactive : VoteActive
+                      selectedOptionIndexes.includes(index)
+                        ? VoteActive
+                        : VoteInactive
                     }
                     className="VoteIcon"
                     alt="VoteIcon"
@@ -336,7 +366,7 @@ const Poll: React.FC = () => {
                 ))}
             </div>
           </div>
-          <div className="RightSide">
+          <div className={`RightSide ${tempFlag ? "" : "dimmed"}`}>
             <div className="Title">
               <img src={Leaderboard} alt="Rank" />
               순위

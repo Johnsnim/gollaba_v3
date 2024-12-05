@@ -157,76 +157,75 @@
       display: flex;
       flex-direction: row;
 
+      .card {
+        width: 300px;
+        height: 150px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f8fbfe;
+        border-radius: 8px;
+        z-index: 1;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+
+        .tools {
+          display: flex;
+          align-items: center;
+          padding: 9px;
+          .circle {
+            padding: 0 4px;
+            .box {
+              display: inline-block;
+              align-items: center;
+              width: 10px;
+              height: 10px;
+              padding: 1px;
+              border-radius: 50%;
+            }
+
+            .red {
+              background-color: #ff605c;
+            }
+
+            .yellow {
+              background-color: #ffbd44;
+            }
+
+            .green {
+              background-color: #00ca4e;
+            }
+          }
+        }
+
+        .CardContent {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          height: 60%;
+          font-size: 18px;
+          gap: 5px;
+          img {
+            height: 30px;
+            vertical-align: middle;
+            margin: 0 2px;
+          }
+
+          div {
+            span {
+              font-weight: bold;
+              color: #fd9741;
+            }
+          }
+        }
+      }
       .LeftSide {
         display: flex;
         flex-direction: column;
         flex: 8;
-
-        .card {
-          width: 300px;
-          height: 150px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: #f8fbfe;
-          border-radius: 8px;
-          z-index: 1;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-
-          .tools {
-            display: flex;
-            align-items: center;
-            padding: 9px;
-            .circle {
-              padding: 0 4px;
-              .box {
-                display: inline-block;
-                align-items: center;
-                width: 10px;
-                height: 10px;
-                padding: 1px;
-                border-radius: 50%;
-              }
-
-              .red {
-                background-color: #ff605c;
-              }
-
-              .yellow {
-                background-color: #ffbd44;
-              }
-
-              .green {
-                background-color: #00ca4e;
-              }
-            }
-          }
-
-          .CardContent {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            width: 100%;
-            height: 60%;
-            font-size: 18px;
-            gap: 5px;
-            img {
-              height: 30px;
-              vertical-align: middle;
-              margin: 0 2px;
-            }
-
-            div {
-              span {
-                font-weight: bold;
-                color: #fd9741;
-              }
-            }
-          }
-        }
 
         .Title {
           font-size: 20px;
@@ -299,6 +298,9 @@
         background-color: rgba(#478ad1, 0.1);
         padding: 20px;
         box-sizing: border-box;
+        &.dimmed {
+          filter: blur(10px);
+        }
 
         .Title {
           display: flex;
