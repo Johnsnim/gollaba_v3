@@ -8,6 +8,7 @@ import {
   MyPage,
   OauthCallback,
   Poll,
+  Search,
   Signup,
   Write,
 } from "./page";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/poll/:pollId" element={<Poll />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/my" element={<MyPage />} />
+            <Route path="/search/:searchTerm" element={<Search />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

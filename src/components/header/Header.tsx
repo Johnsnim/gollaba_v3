@@ -1,20 +1,29 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Logo, SearchIcon } from "../../asset";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { userInfoState, isTokenState } from "../../recoil/atom";
 import { jwtDecode } from "jwt-decode";
 import UserApi from "../../services/user";
+
+interface DecodedToken {
+  exp?: number;
+}
 
 interface UserInfo {
   id: string;
   nickname: string;
+  profileImageUrl?: string;
   [key: string]: any;
 }
 
-const Header = () => {
+const Header: React.FC = () => {
   const nav = useNavigate();
   const loc = useLocation();
-  const [isToken, setIsToken] = useState(false);
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  const [isToken, setIsToken] = useRecoilState(isTokenState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const checkToken = async () => {
@@ -24,8 +33,8 @@ const Header = () => {
         console.log("토큰 있음!", token);
         setIsToken(true);
         try {
-          const userInfo = await UserApi.showUser(token);
-          setUserInfo(userInfo.data.data);
+          const userInfoResponse = await UserApi.showUser(token);
+          setUserInfo(userInfoResponse.data.data);
         } catch (error) {
           console.error("유저 정보 불러오기 실패:", error);
         }
@@ -36,7 +45,7 @@ const Header = () => {
     };
 
     checkToken();
-  }, [loc.pathname]);
+  }, [loc.pathname, setIsToken, setUserInfo]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -48,7 +57,17 @@ const Header = () => {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [setIsToken]);
+
+  useEffect(() => {
+    setSearchTerm("");
+  }, [loc.pathname]);
+
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && searchTerm.trim()) {
+      nav(`/search/${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
 
   console.log("체크>", userInfo);
 
@@ -79,6 +98,9 @@ const Header = () => {
               type="text"
               className="SearchTermInput"
               placeholder="제목으로 투표를 검색하세요."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearch}
             />
           </div>
         </div>
@@ -110,7 +132,11 @@ const Header = () => {
                 nav("/my");
               }}
             >
-              <img className="ProfileImage" src={userInfo?.profileImageUrl} />
+              <img
+                className="ProfileImage"
+                src={userInfo?.profileImageUrl || "/default-profile.png"}
+                alt="Profile"
+              />
               <div className="Nickname">{userInfo?.name || "닉네임"}</div>
             </div>
           )}
@@ -122,13 +148,13 @@ const Header = () => {
 
 export default Header;
 
-function getToken() {
+function getToken(): string | null {
   const token = localStorage.getItem("accessToken");
 
-  if (token === null) return null;
+  if (!token) return null;
 
   try {
-    const decodedToken: { exp?: number } = jwtDecode(token);
+    const decodedToken: DecodedToken = jwtDecode(token);
 
     if (!decodedToken.exp) return null;
 

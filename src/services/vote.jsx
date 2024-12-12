@@ -13,7 +13,11 @@ const VoteApi = {
 
   //검색어 기준 투표 조회
   searchPolls: async (offset, limit, title) =>
-    api.get(`/v2/polls?limit=${limit}&offset=${offset * 15}&title=${title}`),
+    api.get(
+      `/v2/polls?limit=${limit}&offset=${
+        offset * 15
+      }&optionGroup=TITLE&query=${title}`
+    ),
 
   //단일 투표 조회
   getPoll: async (pollId) => api.get(`/v2/polls/${pollId}`),
@@ -44,6 +48,14 @@ const VoteApi = {
 
   //트렌딩 투표
   trendingPolls: async () => api.get(`/v2/polls/trending?limit=5`),
+
+  //좋아요 생성
+  onFavorites: async (pollHashId) =>
+    api.post(`/v2/favorites?pollHashId=${pollHashId}`),
+
+  //좋아요 해제
+  offFavorites: async (pollHashId) =>
+    api.delete(`/v2/favorites?pollHashId=${pollHashId}`),
 };
 
 export default VoteApi;

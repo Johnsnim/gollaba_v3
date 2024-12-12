@@ -5,3 +5,4 @@ export { default as Main } from "./Main";
 export { default as OauthCallback } from "./OauthCallback";
 export { default as Signup } from "./Signup";
 export { default as MyPage } from "./MyPage";
+export { default as Search } from "./Search";
