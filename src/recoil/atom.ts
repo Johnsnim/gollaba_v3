@@ -9,10 +9,15 @@ interface UserInfo {
 
 export const userInfoState = atom<UserInfo | null>({
   key: "userInfoState",
-  default: null, // 초기값을 null로 설정
+  default: null,
 });
 
 export const isTokenState = atom<boolean>({
   key: "isTokenState",
   default: false,
+});
+
+export const userFavoritesState = atom<string[]>({
+  key: "userFavoritesState",
+  default: [],
 });

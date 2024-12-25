@@ -2,7 +2,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Logo, SearchIcon } from "../../asset";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { userInfoState, isTokenState } from "../../recoil/atom";
+import {
+  userInfoState,
+  isTokenState,
+  userFavoritesState,
+} from "../../recoil/atom";
 import { jwtDecode } from "jwt-decode";
 import UserApi from "../../services/user";
 
@@ -23,6 +27,7 @@ const Header: React.FC = () => {
 
   const [isToken, setIsToken] = useRecoilState(isTokenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userFavorites, setUserFavorites] = useRecoilState(userFavoritesState);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -35,17 +40,23 @@ const Header: React.FC = () => {
         try {
           const userInfoResponse = await UserApi.showUser(token);
           setUserInfo(userInfoResponse.data.data);
+
+          // 좋아요 목록 가져오기
+          const favoritesResponse = await UserApi.userFavorites();
+          console.log("좋아요>>", favoritesResponse);
+          setUserFavorites(favoritesResponse.data.data);
         } catch (error) {
-          console.error("유저 정보 불러오기 실패:", error);
+          console.error("유저 정보 또는 좋아요 목록 불러오기 실패:", error);
         }
       } else {
         setIsToken(false);
         setUserInfo(null);
+        setUserFavorites([]);
       }
     };
 
     checkToken();
-  }, [loc.pathname, setIsToken, setUserInfo]);
+  }, [loc.pathname, setIsToken, setUserInfo, setUserFavorites]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -68,8 +79,6 @@ const Header: React.FC = () => {
       nav(`/search/${encodeURIComponent(searchTerm.trim())}`);
     }
   };
-
-  console.log("체크>", userInfo);
 
   if (loc.pathname === "/login") return null;
 

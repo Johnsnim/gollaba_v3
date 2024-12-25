@@ -8,6 +8,7 @@ const UserApi = {
     api.post(`v2/users/change-profile`, payload, token),
   updateUser: async (payload, token) => api.post(`v2/users`, payload, token),
   readCount: async (pollId) => api.post(`/v2/polls/${pollId}/read`),
+  userFavorites: async () => api.get(`/v2/favorites/me`),
 };
 
 export default UserApi;

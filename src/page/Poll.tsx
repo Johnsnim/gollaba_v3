@@ -21,6 +21,8 @@ import {
 import VoteApi from "../services/vote";
 import { useParams } from "react-router-dom";
 import UserApi from "../services/user";
+import { useRecoilState } from "recoil";
+import { userFavoritesState, userInfoState } from "../recoil/atom";
 
 type PollData = {
   id: string;
@@ -45,6 +47,7 @@ type Params = {
 };
 
 const Poll: React.FC = () => {
+  const [userInfo] = useRecoilState(userInfoState);
   //투표 여부 확인용 변수
   const [tempFlag, setTempFlag] = useState(false);
 
@@ -53,11 +56,14 @@ const Poll: React.FC = () => {
 
   const [voteOptions, setVoteOptions] = useState<PollItem[]>([]);
   const [data, setData] = useState<PollData | null>(null);
+  const [namedNickname, setNamedNickname] = useState<string>("");
   const { pollId } = useParams<Params>();
 
   const [selectedOptionIndexes, setSelectedOptionIndexes] = useState<number[]>(
     []
   );
+  const [userFavorites, setUserFavorites] = useRecoilState(userFavoritesState);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     const fetchViewCount = async () => {
@@ -79,6 +85,8 @@ const Poll: React.FC = () => {
           const pollData = response.data.data;
           setData(pollData);
           setVoteOptions(pollData.items || []);
+
+          console.log("폴데이터", pollData);
 
           const isExpiredNow = new Date(pollData.endAt) < new Date();
           setIsExpired(isExpiredNow);
@@ -108,6 +116,27 @@ const Poll: React.FC = () => {
     fetchPollDataAndVoteCheck();
   }, [pollId]);
 
+  useEffect(() => {
+    if (pollId) {
+      setIsLiked(userFavorites.includes(pollId));
+    }
+  }, [userFavorites, pollId]);
+
+  const toggleLike = async () => {
+    try {
+      if (isLiked) {
+        await VoteApi.offFavorites(pollId);
+        setUserFavorites((prev) => prev.filter((id) => id !== pollId));
+      } else {
+        await VoteApi.onFavorites(pollId);
+        setUserFavorites((prev) => [...prev, pollId as string]);
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("Failed to toggle like", error);
+    }
+  };
+
   const handleOptionClick = (index: number) => {
     if (isExpired) return;
 
@@ -128,6 +157,52 @@ const Poll: React.FC = () => {
     }
   };
 
+  // const ClickVoteButton = async () => {
+  //   if (selectedOptionIndexes.length === 0) {
+  //     alert("옵션을 선택해주세요.");
+  //     return;
+  //   }
+
+  //   const selectedOptions = selectedOptionIndexes.map(
+  //     (index) => voteOptions[index]
+  //   );
+
+  //   if (selectedOptions.length === 0) {
+  //     alert("유효한 옵션을 선택해주세요.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const payload = {
+  //       pollHashId: pollId,
+  //       pollItemIds: selectedOptions.map((option) => option.id),
+  //       voterName: "test",
+  //     };
+
+  //     let response;
+
+  //     if (tempFlag) {
+  //       let chosen = await VoteApi.chosenItem(pollId);
+
+  //       console.log("test", chosen.data.data.id);
+
+  //       response = await VoteApi.voteEdit(chosen.data.data.id, {
+  //         pollItemIds: selectedOptions.map((option) => option.id),
+  //       });
+  //     } else {
+  //       response = await VoteApi.vote(payload);
+  //     }
+
+  //     if (response.status === 200) {
+  //       alert(tempFlag ? "투표가 수정되었습니다." : "투표가 완료되었습니다.");
+  //       setTempFlag(true);
+  //     } else {
+  //       console.error("Failed to submit vote", response);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to submit vote", error);
+  //   }
+  // };
   const ClickVoteButton = async () => {
     if (selectedOptionIndexes.length === 0) {
       alert("옵션을 선택해주세요.");
@@ -143,17 +218,19 @@ const Poll: React.FC = () => {
       return;
     }
 
+    console.log("유저인포>>", userInfo);
+
     try {
       const payload = {
         pollHashId: pollId,
         pollItemIds: selectedOptions.map((option) => option.id),
-        voterName: "test",
+        voterName: userInfo?.name || "test",
       };
 
       let response;
 
       if (tempFlag) {
-        let chosen = await VoteApi.chosenItem(pollId);
+        const chosen = await VoteApi.chosenItem(pollId);
 
         console.log("test", chosen.data.data.id);
 
@@ -198,8 +275,14 @@ const Poll: React.FC = () => {
             </div>
             <img src={ViewIcon} alt="ViewIcon" className="ViewIcon" />
             <div>{data.totalVotingCount}</div>
-            <div className="heart-container" title="Like">
-              <input type="checkbox" className="checkbox" id="like-button" />
+            <div className="heart-container" title="Like" onClick={toggleLike}>
+              <input
+                type="checkbox"
+                className="checkbox"
+                id="like-button"
+                checked={isLiked}
+                readOnly
+              />
               <div className="svg-container">
                 <svg
                   viewBox="0 0 24 24"
@@ -313,7 +396,7 @@ const Poll: React.FC = () => {
             <div>No vote options available.</div>
           )}
         </div>
-        <div className="SubmitContainer">
+        {/* <div className="SubmitContainer">
           {isExpired ? (
             <button
               className="SubmitButton"
@@ -328,12 +411,65 @@ const Poll: React.FC = () => {
               재투표하기
             </button>
           ) : (
+            // <button className="SubmitButton" onClick={ClickVoteButton}>
+            //   <img src={manualVoting} alt="vote" />
+            //   투표하기
+            // </button>
+
+            <div className="NamedBtnContainer">
+              <input className="NameInput" placeholder="기명투표 닉네임" />
+              <button className="SubmitButton" onClick={ClickVoteButton}>
+                <img src={manualVoting} alt="vote" />
+                투표하기
+              </button>
+            </div>
+          )}
+        </div> */}
+
+        <div className="SubmitContainer">
+          {isExpired ? (
+            <button
+              className="SubmitButton"
+              style={{ backgroundColor: "#a6a6a6" }}
+            >
+              <img src={manualVoting} alt="vote" />
+              이미 종료된 투표입니다.
+            </button>
+          ) : tempFlag ? (
+            <button className="SubmitButton" onClick={ClickVoteButton}>
+              <img src={manualVoting} alt="vote" />
+              재투표하기
+            </button>
+          ) : data.pollType === "NAMED" && !userInfo ? (
+            <div className="NamedBtnContainer">
+              <input
+                className="NameInput"
+                placeholder="기명투표 닉네임"
+                value={namedNickname}
+                onChange={(e) => setNamedNickname(e.target.value)}
+              />
+              <button
+                className="SubmitButton"
+                onClick={() => {
+                  if (!namedNickname.trim()) {
+                    alert("닉네임을 입력해주세요.");
+                    return;
+                  }
+                  ClickVoteButton();
+                }}
+              >
+                <img src={manualVoting} alt="vote" />
+                투표하기
+              </button>
+            </div>
+          ) : (
             <button className="SubmitButton" onClick={ClickVoteButton}>
               <img src={manualVoting} alt="vote" />
               투표하기
             </button>
           )}
         </div>
+
         <div className="VerticalLine"></div>
 
         <div className="PollResultContainer">
