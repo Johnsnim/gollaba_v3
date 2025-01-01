@@ -51,11 +51,11 @@ const VoteApi = {
 
   //좋아요 생성
   onFavorites: async (pollHashId) =>
-    api.post(`/v2/favorites?pollHashId=${pollHashId}`),
+    api.post(`/v2/favorites`, { pollHashId: pollHashId }),
 
   //좋아요 해제
   offFavorites: async (pollHashId) =>
-    api.delete(`/v2/favorites?pollHashId=${pollHashId}`),
+    api.delete(`/v2/favorites`, { data: { pollHashId: pollHashId } }),
 };
 
 export default VoteApi;

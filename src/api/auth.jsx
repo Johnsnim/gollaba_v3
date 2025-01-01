@@ -9,4 +9,12 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  if (config.method === "delete" && config.data) {
+    config.headers["Content-Type"] = "application/json";
+    config.params = null;
+  }
+  return config;
+});
+
 export default api;

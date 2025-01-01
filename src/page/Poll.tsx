@@ -125,6 +125,7 @@ const Poll: React.FC = () => {
   const toggleLike = async () => {
     try {
       if (isLiked) {
+        console.log("라이크드", pollId);
         await VoteApi.offFavorites(pollId);
         setUserFavorites((prev) => prev.filter((id) => id !== pollId));
       } else {
@@ -217,8 +218,6 @@ const Poll: React.FC = () => {
       alert("유효한 옵션을 선택해주세요.");
       return;
     }
-
-    console.log("유저인포>>", userInfo);
 
     try {
       const payload = {
@@ -426,6 +425,7 @@ const Poll: React.FC = () => {
           )}
         </div> */}
 
+        {/*
         <div className="SubmitContainer">
           {isExpired ? (
             <button
@@ -435,6 +435,55 @@ const Poll: React.FC = () => {
               <img src={manualVoting} alt="vote" />
               이미 종료된 투표입니다.
             </button>
+          ) : tempFlag ? (
+            <button className="SubmitButton" onClick={ClickVoteButton}>
+              <img src={manualVoting} alt="vote" />
+              재투표하기
+            </button>
+          ) : data.pollType === "NAMED" && !userInfo ? (
+            <div className="NamedBtnContainer">
+              <input
+                className="NameInput"
+                placeholder="기명투표 닉네임"
+                value={namedNickname}
+                onChange={(e) => setNamedNickname(e.target.value)}
+              />
+              <button
+                className="SubmitButton"
+                onClick={() => {
+                  if (!namedNickname.trim()) {
+                    alert("닉네임을 입력해주세요.");
+                    return;
+                  }
+                  ClickVoteButton();
+                }}
+              >
+                <img src={manualVoting} alt="vote" />
+                투표하기
+              </button>
+            </div>
+          ) : (
+            <button className="SubmitButton" onClick={ClickVoteButton}>
+              <img src={manualVoting} alt="vote" />
+              투표하기
+            </button>
+          )}
+        </div>
+        */}
+
+        <div className="SubmitContainer">
+          {isExpired ? (
+            <button
+              className="SubmitButton"
+              style={{ backgroundColor: "#a6a6a6" }}
+            >
+              <img src={manualVoting} alt="vote" />
+              이미 종료된 투표입니다.
+            </button>
+          ) : !userInfo && tempFlag ? (
+            <div>
+              {/* 비회원이 투표를 마친 경우 버튼을 표시하지 않습니다. */}
+            </div>
           ) : tempFlag ? (
             <button className="SubmitButton" onClick={ClickVoteButton}>
               <img src={manualVoting} alt="vote" />

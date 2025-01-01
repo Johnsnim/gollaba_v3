@@ -88,11 +88,36 @@ const Signup = () => {
     }
   };
 
+  // const signup = async () => {
+  //   if (email.length == 0) {
+  //     setModalMessage("이메일을 기입해주세요.");
+  //     setOpenModal(true);
+  //   }
+  //   const payload = {
+  //     email: email,
+  //     name: name,
+  //     profileImageUrl: profileImageUrl,
+  //     providerType: providerType,
+  //     providerId: providerId,
+  //   };
+
+  //   console.log("페이로드>", payload);
+  //   const response = await UserApi.signupForm(payload);
+
+  //   if (response?.data?.error === true) {
+  //     alert(response.data.message);
+  //     return;
+  //   }
+
+  //   navigate("/");
+  // };
   const signup = async () => {
-    if (email.length == 0) {
+    if (email.length === 0) {
       setModalMessage("이메일을 기입해주세요.");
       setOpenModal(true);
+      return;
     }
+
     const payload = {
       email: email,
       name: name,
@@ -102,14 +127,28 @@ const Signup = () => {
     };
 
     console.log("페이로드>", payload);
-    const response = await UserApi.signupForm(payload);
 
-    if (response?.data?.error === true) {
-      alert(response.data.message);
-      return;
+    try {
+      const response = await UserApi.signupForm(payload);
+
+      if (response?.data?.error) {
+        alert(response.data.message);
+        return;
+      }
+
+      const accessToken = response?.data?.accessToken;
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+        navigate("/");
+      } else {
+        setModalMessage("로그인에 문제가 발생했습니다. 다시 시도해주세요.");
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("회원가입 중 오류 발생:", error);
+      setModalMessage("회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      setOpenModal(true);
     }
-
-    navigate("/login");
   };
 
   return (
