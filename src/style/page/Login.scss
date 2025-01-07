@@ -1,3 +1,5 @@
+@import "../mixin";
+
 .Login {
   display: flex;
   justify-content: center;
@@ -104,6 +106,119 @@
       position: fixed;
       bottom: 27px;
       color: #d9d9d9;
+    }
+  }
+}
+
+@include mobile {
+  .Login {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #e5f2ff;
+
+    .LoginInner {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      height: 100%;
+      width: 580px;
+
+      .HomeButton {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        align-items: center;
+        transition: scale 0.2s;
+        cursor: pointer;
+
+        &:hover {
+          scale: 1.05;
+        }
+
+        img {
+          height: 16px;
+          width: 16px;
+        }
+
+        div {
+          margin-left: 5px;
+          color: #c9c9c9;
+          font-size: 15px;
+        }
+      }
+
+      .UpperPartContainer {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+
+        .LoginIcon {
+          width: 60vw;
+          height: 60vw;
+        }
+
+        .Title {
+          margin-top: 16px;
+          font-size: 10vw;
+          letter-spacing: -5%;
+          font-family: "YANGJIN";
+        }
+      }
+
+      .LowerPartContainer {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 60px;
+        gap: 12px;
+
+        .LoginBox {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          width: 90vw;
+          height: 15vw;
+          border: 1px #d9d9d9 solid;
+          border-radius: 3px;
+          transition: background-color 0.3s;
+          cursor: pointer;
+
+          .ProviderIcon {
+            position: absolute;
+            left: 20px;
+            width: 10vw;
+            height: 10vw;
+          }
+
+          .StartWithProvider {
+            font-size: 5vw;
+            letter-spacing: -1px;
+            font-weight: 500;
+          }
+
+          &:hover {
+            background-color: #d9d9d9;
+          }
+        }
+      }
+
+      .Copyright {
+        position: fixed;
+        bottom: 27px;
+        color: #d9d9d9;
+        font-size: 3vw;
+      }
     }
   }
 }

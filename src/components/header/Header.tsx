@@ -29,6 +29,20 @@ const Header: React.FC = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [userFavorites, setUserFavorites] = useRecoilState(userFavoritesState);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 565);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -114,6 +128,47 @@ const Header: React.FC = () => {
           </div>
         </div>
 
+        {/* <div className="HeaderRight">
+          <div
+            className="HeaderButton"
+            style={{ backgroundColor: "#478AD1" }}
+            onClick={() => {
+              nav("/write");
+            }}
+          >
+            투표 만들기
+          </div>
+
+          {!isToken ? (
+            <div
+              className="HeaderButton login"
+              onClick={() => {
+                nav("/login");
+              }}
+            >
+              로그인
+            </div>
+          ) : (
+            // <div
+            //   className="MypageBtn"
+            //   onClick={() => {
+            //     nav("/my");
+            //   }}
+            // >
+            //   <img
+            //     className="ProfileImage"
+            //     src={userInfo?.profileImageUrl || "/default-profile.png"}
+            //     alt="Profile"
+            //   />
+            //   <div className="Nickname">{userInfo?.name || "닉네임"}</div>
+            // </div>
+            <img
+              className="ProfileImage"
+              src={userInfo?.profileImageUrl || "/default-profile.png"}
+              alt="Profile"
+            />
+          )}
+        </div> */}
         <div className="HeaderRight">
           <div
             className="HeaderButton"
@@ -134,6 +189,15 @@ const Header: React.FC = () => {
             >
               로그인
             </div>
+          ) : isMobile ? (
+            <img
+              className="ProfileImage"
+              src={userInfo?.profileImageUrl || "/default-profile.png"}
+              alt="Profile"
+              onClick={() => {
+                nav("/my");
+              }}
+            />
           ) : (
             <div
               className="MypageBtn"

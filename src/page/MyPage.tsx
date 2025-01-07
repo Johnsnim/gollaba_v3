@@ -171,6 +171,18 @@ const MyPage: React.FC = () => {
             <div className="Email">
               {userInfo?.email || "example@gmail.com"}
             </div>
+
+            <button
+              className="Logout"
+              onClick={() => {
+                localStorage.removeItem("accessToken");
+                setIsToken(false);
+                setUserInfo(null);
+                nav("/");
+              }}
+            >
+              로그아웃
+            </button>
           </div>
         </div>
 
