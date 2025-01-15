@@ -108,7 +108,7 @@
           align-items: center;
           width: 50%;
           height: 40px;
-          font-size: 20px;
+          font-size: 15px;
           font-weight: bold;
           cursor: pointer;
           border: none;
@@ -215,6 +215,231 @@
 
         span {
           margin: 10px;
+        }
+      }
+    }
+  }
+}
+
+@include tablet {
+  @import "../mixin";
+
+  .MyPage {
+    display: flex;
+    justify-content: center;
+    height: auto;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #e5f2ff;
+    color: #13212c;
+
+    .Inner {
+      @include CommonInnerStyle;
+      justify-content: flex-start;
+      padding-top: 160px;
+      padding-left: 100px;
+      padding-right: 100px;
+      z-index: 3;
+      min-height: 100vh;
+
+      // margin-top: 50px;
+      .TopBox {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        height: fit-content;
+
+        .Profile {
+          width: 250px;
+          height: 250px;
+          object-fit: cover;
+          cursor: pointer;
+          border-radius: 50%;
+          margin-right: 30px;
+        }
+
+        .Detail {
+          .Nickname {
+            font-size: 35px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+
+            img {
+              cursor: pointer;
+              margin-left: 10px;
+              height: 20px;
+              width: 20px;
+
+              &:hover {
+                animation: scaleUpDown 0.6s;
+              }
+            }
+
+            input {
+              height: 35px;
+              border: none;
+              border-bottom: 1px solid #000;
+              font-size: 20px;
+              font-family: "SUIT";
+              font-weight: bold;
+
+              &:focus {
+                outline: none;
+              }
+            }
+          }
+
+          .Email {
+            color: #808080;
+          }
+
+          .Logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #478ad1;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            transition: transform 0.3s;
+
+            &:hover {
+              transform: scale(0.95);
+            }
+          }
+        }
+      }
+      .UnderBox {
+        margin-top: 50px;
+        .Tabs {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 50%;
+          height: 30px;
+
+          .TabButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+
+            &.active {
+              background-color: #878787;
+              color: #fff;
+            }
+          }
+        }
+
+        .Numbering {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+        .PollList {
+          display: grid;
+          width: 100%;
+
+          border-collapse: collapse;
+
+          .PollHeader {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr 0.8fr;
+            width: 100%;
+            border-bottom: 2px solid #000;
+
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 0;
+          }
+
+          .PollItem {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr 0.8fr;
+            width: 100%;
+            border-bottom: 1px solid #000;
+            text-align: center;
+            padding: 10px 0;
+            gap: 10px;
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
+
+            .PollIsExpired {
+              display: flex;
+              justify-content: center;
+              .Now {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #478ad1;
+                height: fit-content;
+                width: fit-content;
+                padding: 4px 5px;
+                border-radius: 3px;
+                font-size: 12px;
+                color: #fff;
+
+                &.Expired {
+                  background-color: #fd9741;
+                }
+              }
+            }
+
+            .PollTypes {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              img {
+                height: 20px;
+                margin-right: 5px;
+              }
+            }
+          }
+        }
+
+        .Pagination {
+          display: flex;
+          width: 100%;
+          margin-top: 10px;
+          justify-content: center;
+
+          button {
+            background-color: #478ad1;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #000;
+            font-family: "SUIT";
+            font-size: 14px;
+
+            &:disabled {
+              background-color: #c1c1c1;
+              color: #fff;
+              cursor: not-allowed;
+            }
+          }
+
+          span {
+            margin: 10px;
+          }
         }
       }
     }

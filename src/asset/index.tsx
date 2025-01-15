@@ -3,7 +3,7 @@ export { default as Logo } from "./Common/Logo.png";
 export { default as HelpIcon } from "./Common/help-icon.png";
 export { default as VoteActive } from "./Common/voteIcon-active.png";
 export { default as VoteInactive } from "./Common/voteIcon-inactive.png";
-export { default as Temp } from "./Common/test.png";
+export { default as Temp } from "./Common/userIcon.png";
 export { default as ImageIcon } from "./Common/image.png";
 export { default as Crown } from "./Common/crown.png";
 export { default as manualVoting } from "./Common/manual-voting.png";
