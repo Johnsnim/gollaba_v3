@@ -56,6 +56,10 @@ const VoteApi = {
   //좋아요 해제
   offFavorites: async (pollHashId) =>
     api.delete(`/v2/favorites`, { data: { pollHashId: pollHashId } }),
+
+  //좋아요 투표 전체 조회
+  getFavorites: async (page, limit) =>
+    api.get(`/v2/polls/favorites-me?page=${page}&size=${limit}`),
 };
 
 export default VoteApi;

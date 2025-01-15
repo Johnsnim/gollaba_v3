@@ -3,6 +3,7 @@ import {
   AnonymousIcon,
   BronzeCrown,
   Crown,
+  IdentifiedIcon,
   ImageIcon,
   Leaderboard,
   LeftArrow,
@@ -19,15 +20,17 @@ import {
   VoteInactive,
 } from "../asset";
 import VoteApi from "../services/vote";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserApi from "../services/user";
 import { useRecoilState } from "recoil";
 import { userFavoritesState, userInfoState } from "../recoil/atom";
+import { set } from "date-fns";
 
 type PollData = {
   id: string;
   title: string;
   creatorName: string;
+  creatorProfileUrl: string | null;
   responseType: "SINGLE" | "MULTIPLE";
   pollType: "ANONYMOUS" | "NAMED";
   endAt: string;
@@ -46,7 +49,52 @@ type Params = {
   pollId: string;
 };
 
+const Modal: React.FC<{
+  message: string;
+  onClose: () => void;
+  redirect?: boolean;
+  redirectPath?: string;
+}> = ({ message, onClose, redirect, redirectPath }) => {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    if (redirect && redirectPath) {
+      navigate(redirectPath);
+    } else {
+      onClose();
+    }
+  };
+
+  return (
+    <div className="ModalBackdrop" onClick={handleClose}>
+      <div className="card">
+        <div className="tools">
+          <div className="circle">
+            <span className="red box"></span>
+          </div>
+          <div className="circle">
+            <span className="yellow box"></span>
+          </div>
+          <div className="circle">
+            <span className="green box"></span>
+          </div>
+        </div>
+        <div className="CardContent">
+          <div>{message}</div>
+          <button onClick={handleClose}>확인</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Poll: React.FC = () => {
+  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [isRedirect, setIsRedirect] = useState<boolean>(false);
+  const [redirectPath, setRedirectPath] = useState<string>("");
+
   const [userInfo] = useRecoilState(userInfoState);
   //투표 여부 확인용 변수
   const [tempFlag, setTempFlag] = useState(false);
@@ -123,9 +171,15 @@ const Poll: React.FC = () => {
   }, [userFavorites, pollId]);
 
   const toggleLike = async () => {
+    if (!userInfo) {
+      setModalMessage("로그인 후 이용 가능한 서비스입니다.");
+      setOpenModal(true);
+      setIsRedirect(true);
+      setRedirectPath("/login");
+    }
+
     try {
       if (isLiked) {
-        console.log("라이크드", pollId);
         await VoteApi.offFavorites(pollId);
         setUserFavorites((prev) => prev.filter((id) => id !== pollId));
       } else {
@@ -158,55 +212,10 @@ const Poll: React.FC = () => {
     }
   };
 
-  // const ClickVoteButton = async () => {
-  //   if (selectedOptionIndexes.length === 0) {
-  //     alert("옵션을 선택해주세요.");
-  //     return;
-  //   }
-
-  //   const selectedOptions = selectedOptionIndexes.map(
-  //     (index) => voteOptions[index]
-  //   );
-
-  //   if (selectedOptions.length === 0) {
-  //     alert("유효한 옵션을 선택해주세요.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const payload = {
-  //       pollHashId: pollId,
-  //       pollItemIds: selectedOptions.map((option) => option.id),
-  //       voterName: "test",
-  //     };
-
-  //     let response;
-
-  //     if (tempFlag) {
-  //       let chosen = await VoteApi.chosenItem(pollId);
-
-  //       console.log("test", chosen.data.data.id);
-
-  //       response = await VoteApi.voteEdit(chosen.data.data.id, {
-  //         pollItemIds: selectedOptions.map((option) => option.id),
-  //       });
-  //     } else {
-  //       response = await VoteApi.vote(payload);
-  //     }
-
-  //     if (response.status === 200) {
-  //       alert(tempFlag ? "투표가 수정되었습니다." : "투표가 완료되었습니다.");
-  //       setTempFlag(true);
-  //     } else {
-  //       console.error("Failed to submit vote", response);
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to submit vote", error);
-  //   }
-  // };
   const ClickVoteButton = async () => {
     if (selectedOptionIndexes.length === 0) {
-      alert("옵션을 선택해주세요.");
+      setModalMessage("옵션을 선택해주세요.");
+      setOpenModal(true);
       return;
     }
 
@@ -215,7 +224,8 @@ const Poll: React.FC = () => {
     );
 
     if (selectedOptions.length === 0) {
-      alert("유효한 옵션을 선택해주세요.");
+      setModalMessage("유효한 옵션을 선택해주세요.");
+      setOpenModal(true);
       return;
     }
 
@@ -231,8 +241,6 @@ const Poll: React.FC = () => {
       if (tempFlag) {
         const chosen = await VoteApi.chosenItem(pollId);
 
-        console.log("test", chosen.data.data.id);
-
         response = await VoteApi.voteEdit(chosen.data.data.id, {
           pollItemIds: selectedOptions.map((option) => option.id),
         });
@@ -241,8 +249,12 @@ const Poll: React.FC = () => {
       }
 
       if (response.status === 200) {
-        alert(tempFlag ? "투표가 수정되었습니다." : "투표가 완료되었습니다.");
+        setModalMessage(
+          tempFlag ? "투표가 수정되었습니다." : "투표가 완료되었습니다."
+        );
+
         setTempFlag(true);
+        setOpenModal(true);
       } else {
         console.error("Failed to submit vote", response);
       }
@@ -257,6 +269,14 @@ const Poll: React.FC = () => {
 
   return (
     <div className="Poll">
+      {openModal && (
+        <Modal
+          message={modalMessage}
+          onClose={() => setOpenModal(false)}
+          redirect={isRedirect}
+          redirectPath={redirectPath}
+        />
+      )}
       <div className="Inner">
         <div className="UpperDiv">
           <div className="Title">
@@ -265,7 +285,10 @@ const Poll: React.FC = () => {
           </div>
           <div className="UpperDescription">
             <div className="Desc">
-              <img src={Temp} alt="Temp" />
+              <img
+                src={data.creatorProfileUrl ? data.creatorProfileUrl : Temp}
+                alt="Temp"
+              />
               <div>
                 {data.creatorName} ·{" "}
                 {data.endAt ? new Date(data.endAt).toLocaleDateString() : ""}{" "}
@@ -318,11 +341,13 @@ const Poll: React.FC = () => {
         <div className="Options">
           <div className="Option">
             <img
-              src={data.pollType === "ANONYMOUS" ? AnonymousIcon : MultipleVote}
+              src={
+                data.pollType === "ANONYMOUS" ? AnonymousIcon : IdentifiedIcon
+              }
               alt="OptionIcon"
               className="OptionIcon"
             />
-            <div>{data.pollType === "ANONYMOUS" ? "익명투표" : "복수투표"}</div>
+            <div>{data.pollType === "ANONYMOUS" ? "익명투표" : "기명투표"}</div>
           </div>
 
           <div className="Option">
@@ -501,7 +526,8 @@ const Poll: React.FC = () => {
                 className="SubmitButton"
                 onClick={() => {
                   if (!namedNickname.trim()) {
-                    alert("닉네임을 입력해주세요.");
+                    setModalMessage("닉네임을 입력해주세요.");
+                    setOpenModal(true);
                     return;
                   }
                   ClickVoteButton();

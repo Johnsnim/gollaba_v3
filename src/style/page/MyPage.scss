@@ -95,6 +95,33 @@
     }
     .UnderBox {
       margin-top: 50px;
+      .Tabs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20%;
+        height: 30px;
+
+        .TabButton {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 50%;
+          height: 40px;
+          font-size: 20px;
+          font-weight: bold;
+          cursor: pointer;
+          border: none;
+
+          border-top-left-radius: 15px;
+          border-top-right-radius: 15px;
+
+          &.active {
+            background-color: #878787;
+            color: #fff;
+          }
+        }
+      }
 
       .Numbering {
         font-size: 20px;
@@ -272,6 +299,34 @@
       .UnderBox {
         margin-top: 50px;
 
+        .Tabs {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 50%;
+          height: 30px;
+
+          .TabButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            height: 40px;
+            font-size: 3vw;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+
+            &.active {
+              background-color: #878787;
+              color: #fff;
+            }
+          }
+        }
+
         .Numbering {
           font-size: 4vw;
           font-weight: bold;
@@ -288,7 +343,6 @@
             grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 0.8fr;
             width: 100%;
             border-bottom: 2px solid #000;
-
             font-weight: bold;
             font-size: 3vw;
             text-align: center;
@@ -297,7 +351,7 @@
 
           .PollItem {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 0.8fr;
+            grid-template-columns: 2fr 1.2fr 1.5fr 1.5fr 0.8fr;
             width: 100%;
             border-bottom: 1px solid #000;
             text-align: center;
@@ -331,18 +385,22 @@
             }
 
             .PollTitle {
+              display: block;
+              font-size: 3vw;
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
+              max-width: 100%;
+              text-align: center;
             }
 
             .PollTypes,
-            .PollTitle,
             .PollEndDate,
             .PollReadCounts {
               display: flex;
               align-items: center;
               justify-content: center;
+
               img {
                 height: 3vw;
                 margin-right: 5px;

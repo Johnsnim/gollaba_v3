@@ -133,7 +133,18 @@ const Main: React.FC = () => {
                 <div className="Options">
                   {poll.items.slice(0, 4).map((item) => (
                     <div className="IndividualOption" key={item.id}>
-                      <div className="Background"></div>
+                      <div
+                        className="Background"
+                        style={{
+                          backgroundImage: item.imageUrl
+                            ? `url(${item.imageUrl})`
+                            : "none",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      >
+                        {" "}
+                      </div>
                       <div className="content">{item.description}</div>
                     </div>
                   ))}
@@ -172,7 +183,18 @@ const Main: React.FC = () => {
                 <div className="Options">
                   {poll.items.slice(0, 4).map((item) => (
                     <div className="IndividualOption" key={item.id}>
-                      <div className="Background"> </div>
+                      <div
+                        className="Background"
+                        style={{
+                          backgroundImage: item.imageUrl
+                            ? `url(${item.imageUrl})`
+                            : "none",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      >
+                        {" "}
+                      </div>
                       <div className="content">{item.description}</div>
                     </div>
                   ))}

@@ -672,6 +672,7 @@
         height: auto;
         width: 100%;
         margin-top: 40px;
+        max-width: 100%;
 
         .TitleBox {
           position: relative;
@@ -700,24 +701,33 @@
 
         .PollsBox {
           display: flex;
-          flex-wrap: wrap;
           justify-content: space-between;
           align-items: center;
           height: auto;
           width: 100%;
+          max-width: 95vw;
           border-top-right-radius: 10px;
           border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
           padding: 10px 5px;
           box-sizing: border-box;
           gap: 10px;
+          overflow: hidden;
+          overflow-x: auto;
+          overflow-y: hidden;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+          -ms-overflow-style: none;
+          scrollbar-width: none;
 
           .IndividualPoll {
             cursor: pointer;
             display: flex;
             flex-direction: column;
             height: 160px;
-            width: calc(50% - 10px);
+            min-width: calc(50% - 10px);
             background-color: #fff;
             border-radius: 5px;
             position: relative;
@@ -752,7 +762,7 @@
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis;
-                  max-width: calc(3vw * 8);
+                  max-width: calc(3vw * 7);
                 }
 
                 .Detail {
@@ -912,7 +922,7 @@
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
-              max-width: calc(14px * 8);
+              max-width: calc(14px * 7);
             }
 
             .Detail {
