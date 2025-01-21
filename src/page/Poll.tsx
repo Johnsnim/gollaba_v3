@@ -129,12 +129,9 @@ const Poll: React.FC = () => {
       try {
         const response = await VoteApi.getPoll(pollId);
         if (response.status === 200) {
-          console.log("Fetched Poll Data:", response.data.data);
           const pollData = response.data.data;
           setData(pollData);
           setVoteOptions(pollData.items || []);
-
-          console.log("폴데이터", pollData);
 
           const isExpiredNow = new Date(pollData.endAt) < new Date();
           setIsExpired(isExpiredNow);
@@ -420,81 +417,6 @@ const Poll: React.FC = () => {
             <div>No vote options available.</div>
           )}
         </div>
-        {/* <div className="SubmitContainer">
-          {isExpired ? (
-            <button
-              className="SubmitButton"
-              style={{ backgroundColor: "#a6a6a6" }}
-            >
-              <img src={manualVoting} alt="vote" />
-              이미 종료된 투표입니다.
-            </button>
-          ) : tempFlag ? (
-            <button className="SubmitButton" onClick={ClickVoteButton}>
-              <img src={manualVoting} alt="vote" />
-              재투표하기
-            </button>
-          ) : (
-            // <button className="SubmitButton" onClick={ClickVoteButton}>
-            //   <img src={manualVoting} alt="vote" />
-            //   투표하기
-            // </button>
-
-            <div className="NamedBtnContainer">
-              <input className="NameInput" placeholder="기명투표 닉네임" />
-              <button className="SubmitButton" onClick={ClickVoteButton}>
-                <img src={manualVoting} alt="vote" />
-                투표하기
-              </button>
-            </div>
-          )}
-        </div> */}
-
-        {/*
-        <div className="SubmitContainer">
-          {isExpired ? (
-            <button
-              className="SubmitButton"
-              style={{ backgroundColor: "#a6a6a6" }}
-            >
-              <img src={manualVoting} alt="vote" />
-              이미 종료된 투표입니다.
-            </button>
-          ) : tempFlag ? (
-            <button className="SubmitButton" onClick={ClickVoteButton}>
-              <img src={manualVoting} alt="vote" />
-              재투표하기
-            </button>
-          ) : data.pollType === "NAMED" && !userInfo ? (
-            <div className="NamedBtnContainer">
-              <input
-                className="NameInput"
-                placeholder="기명투표 닉네임"
-                value={namedNickname}
-                onChange={(e) => setNamedNickname(e.target.value)}
-              />
-              <button
-                className="SubmitButton"
-                onClick={() => {
-                  if (!namedNickname.trim()) {
-                    alert("닉네임을 입력해주세요.");
-                    return;
-                  }
-                  ClickVoteButton();
-                }}
-              >
-                <img src={manualVoting} alt="vote" />
-                투표하기
-              </button>
-            </div>
-          ) : (
-            <button className="SubmitButton" onClick={ClickVoteButton}>
-              <img src={manualVoting} alt="vote" />
-              투표하기
-            </button>
-          )}
-        </div>
-        */}
 
         <div className="SubmitContainer">
           {isExpired ? (
@@ -506,9 +428,7 @@ const Poll: React.FC = () => {
               이미 종료된 투표입니다.
             </button>
           ) : !userInfo && tempFlag ? (
-            <div>
-              {/* 비회원이 투표를 마친 경우 버튼을 표시하지 않습니다. */}
-            </div>
+            <div>{/*비회원이 투표를 마친 경우*/}</div>
           ) : tempFlag ? (
             <button className="SubmitButton" onClick={ClickVoteButton}>
               <img src={manualVoting} alt="vote" />

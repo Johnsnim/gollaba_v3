@@ -94,16 +94,6 @@ const Write = () => {
     { imageFile: null, title: "" },
   ]);
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   if (!accessToken) {
-  //     setModalMessage("로그인이 필요한 서비스입니다.");
-  //     setIsRedirect(true);
-  //     setRedirectPath("/login");
-  //     setOpenModal(true);
-  //   }
-  // }, [navigate]);
-
   useEffect(() => {
     const checkToken = async () => {
       const token = getToken();
@@ -122,7 +112,6 @@ const Write = () => {
     };
 
     checkToken();
-    console.log("userInfo", userInfo);
   }, []);
 
   const addVoteOption = () => {
@@ -170,75 +159,6 @@ const Write = () => {
     e.preventDefault();
     e.stopPropagation();
   };
-
-  // const handleSubmit = (): void => {
-  //   if (selectedDate) {
-  //     const now = new Date();
-  //     const oneHourLater = new Date(now.setHours(now.getHours() + 1));
-  //     if (selectedDate < oneHourLater) {
-  //       setModalMessage("투표시간은 최소 1시간입니다.");
-  //       setOpenModal(true);
-  //       return;
-  //     }
-  //   }
-
-  //   if (title.length == 0) {
-  //     setModalMessage("투표 제목을 입력해주세요.");
-  //     setOpenModal(true);
-  //     return;
-  //   }
-
-  //   const emptyOption = voteOptions.find(
-  //     (option) => option.title.trim() === ""
-  //   );
-  //   if (emptyOption) {
-  //     setModalMessage("모든 항목에 제목을 기입해주세요.");
-  //     setOpenModal(true);
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("userId", "null");
-  //   formData.append("creatorName", "비회원");
-  //   formData.append("title", title);
-  //   formData.append("responseType", isSingle ? "SINGLE" : "MULTIPLE");
-  //   formData.append("pollType", isAnon ? "ANONYMOUS" : "NAMED");
-
-  //   if (selectedDate) {
-  //     const localDateString = format(selectedDate, "yyyy-MM-dd'T'HH:mm:ss", {
-  //       locale: ko,
-  //     });
-  //     formData.append("endAt", localDateString);
-  //   }
-
-  //   voteOptions.forEach((option, index) => {
-  //     formData.append(`items[${index}].description`, option.title);
-  //     if (option.imageFile) {
-  //       formData.append(`items[${index}].image`, option.imageFile);
-  //     }
-  //   });
-
-  //   const createPoll = async (formData: FormData) => {
-  //     try {
-  //       const response = await VoteApi.createPoll(formData);
-  //       if (response.data.status === "SUCCESS") {
-  //         setModalMessage("투표가 등록되었습니다.");
-  //         setIsRedirect(true);
-  //         setRedirectPath(`/poll/${response.data.data.id}`);
-  //         setOpenModal(true);
-  //       } else {
-  //         setModalMessage("투표 등록 중 문제가 발생했습니다.");
-  //         setOpenModal(true);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //       setModalMessage("투표 등록 중 문제가 발생했습니다.");
-  //       setOpenModal(true);
-  //     }
-  //   };
-
-  //   createPoll(formData);
-  // };
 
   const handleSubmit = (): void => {
     if (selectedDate) {

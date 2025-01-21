@@ -205,6 +205,10 @@
           color: #000;
           font-family: "SUIT";
           font-size: 14px;
+          border: none;
+          outline: none;
+          font-weight: bold;
+          cursor: pointer;
 
           &:disabled {
             background-color: #c1c1c1;
@@ -427,6 +431,7 @@
             padding: 5px 10px;
             border-radius: 5px;
             color: #000;
+
             font-family: "SUIT";
             font-size: 14px;
 

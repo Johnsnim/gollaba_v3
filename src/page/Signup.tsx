@@ -88,29 +88,6 @@ const Signup = () => {
     }
   };
 
-  // const signup = async () => {
-  //   if (email.length == 0) {
-  //     setModalMessage("이메일을 기입해주세요.");
-  //     setOpenModal(true);
-  //   }
-  //   const payload = {
-  //     email: email,
-  //     name: name,
-  //     profileImageUrl: profileImageUrl,
-  //     providerType: providerType,
-  //     providerId: providerId,
-  //   };
-
-  //   console.log("페이로드>", payload);
-  //   const response = await UserApi.signupForm(payload);
-
-  //   if (response?.data?.error === true) {
-  //     alert(response.data.message);
-  //     return;
-  //   }
-
-  //   navigate("/");
-  // };
   const signup = async () => {
     if (email.length === 0) {
       setModalMessage("이메일을 기입해주세요.");
@@ -125,8 +102,6 @@ const Signup = () => {
       providerType: providerType,
       providerId: providerId,
     };
-
-    console.log("페이로드>", payload);
 
     try {
       const response = await UserApi.signupForm(payload);

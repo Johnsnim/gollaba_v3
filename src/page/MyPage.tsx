@@ -102,6 +102,50 @@ const MyPage: React.FC = () => {
     setActiveTab(tab);
   };
 
+  const handleEditNickname = () => {
+    setIsEditingNickname(true);
+    setNewNickname(userInfo?.nickname || "");
+  };
+  const handleCancelEdit = () => {
+    setIsEditingNickname(false);
+    setNewNickname("");
+  };
+  const handleSaveNickname = async () => {
+    if (!newNickname.trim()) return;
+    try {
+      await UserApi.changeName({ name: newNickname });
+      setUserInfo((prev) => (prev ? { ...prev, nickname: newNickname } : prev));
+      setIsEditingNickname(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("닉네임 변경 실패:", error);
+    }
+  };
+  const handleProfileImageClick = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = async (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        const formData = new FormData();
+        formData.append("image", target.files[0]);
+        try {
+          const response = await UserApi.changeImage(formData);
+          setUserInfo((prev) =>
+            prev
+              ? { ...prev, profileImageUrl: response.data.data.profileImageUrl }
+              : prev
+          );
+          window.location.reload();
+        } catch (error) {
+          console.error("프로필 이미지 변경 실패:", error);
+        }
+      }
+    };
+    fileInput.click();
+  };
+
   const currentPage = activeTab === "myPolls" ? myPollsPage : favoritesPage;
   const totalPages =
     activeTab === "myPolls" ? myPollsTotalPages : favoritesTotalPages;
@@ -114,6 +158,7 @@ const MyPage: React.FC = () => {
             className="Profile"
             src={userInfo?.profileImageUrl || "default-profile.png"}
             alt="Profile"
+            onClick={handleProfileImageClick}
           />
           <div className="Detail">
             <div className="Nickname">
@@ -128,13 +173,13 @@ const MyPage: React.FC = () => {
                   <img
                     src={Check}
                     alt="Save"
-                    onClick={() => {}}
+                    onClick={handleSaveNickname}
                     className="Icon"
                   />
                   <img
                     src={Cancel}
                     alt="Cancel"
-                    onClick={() => {}}
+                    onClick={handleCancelEdit}
                     className="Icon"
                   />
                 </>
@@ -217,7 +262,7 @@ const MyPage: React.FC = () => {
           </div>
           <div className="Pagination">
             <button onClick={handlePreviousPage} disabled={currentPage === 0}>
-              이전 페이지
+              이전
             </button>
             <span>
               {currentPage + 1} / {totalPages}
@@ -226,7 +271,7 @@ const MyPage: React.FC = () => {
               onClick={handleNextPage}
               disabled={currentPage === totalPages - 1}
             >
-              다음 페이지
+              다음
             </button>
           </div>
         </div>

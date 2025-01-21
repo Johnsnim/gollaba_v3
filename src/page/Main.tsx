@@ -64,7 +64,6 @@ const Main: React.FC = () => {
         const response = await VoteApi.getPolls(0, 30);
         const pollResponse: PollResponse = response.data.data;
         setAllPolls(pollResponse.items || []);
-        console.log(response);
       } catch (error) {
         console.error("Failed to fetch all polls", error);
       }

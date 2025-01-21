@@ -13,6 +13,7 @@ export default function OAuth2CallbackPage() {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
       navigate("/");
+      window.location.reload();
       return;
     }
 
