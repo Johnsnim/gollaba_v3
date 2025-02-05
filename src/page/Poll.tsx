@@ -511,7 +511,7 @@ const Poll: React.FC = () => {
                         (option.votingCount / (data.totalVotingCount || 1)) *
                         100
                       ).toFixed(1)}
-                      %
+                      % {option.votingCount}회
                     </div>
                     <div className="OptionPercent">
                       <div
