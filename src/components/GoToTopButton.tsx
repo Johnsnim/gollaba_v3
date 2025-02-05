@@ -46,6 +46,7 @@ const GoToTopButton: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: "9999",
       }}
       onMouseOver={(e) => {
         (e.target as HTMLElement).style.transform = "scale(1.2)";
