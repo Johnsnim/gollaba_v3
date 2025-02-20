@@ -9,6 +9,7 @@ const UserApi = {
   updateUser: async (payload, token) => api.post(`v2/users`, payload, token),
   readCount: async (pollId) => api.post(`/v2/polls/${pollId}/read`),
   userFavorites: async () => api.get(`/v2/favorites/me`),
+  renewToken: async () => api.post(`/v2/users/renew-token`),
 };
 
 export default UserApi;
