@@ -55,8 +55,10 @@ const Header: React.FC = () => {
 
       if (token !== null) {
         setIsToken(true);
+        console.log("token", token);
         try {
           const userInfoResponse = await UserApi.showUser(token);
+          console.log("userInfoResponse", userInfoResponse);
           setUserInfo(userInfoResponse.data.data);
 
           const favoritesResponse = await UserApi.userFavorites();

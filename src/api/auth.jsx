@@ -23,8 +23,21 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import UserApi from "../services/user";
 
+const userToken = localStorage.getItem("accessToken");
+
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
+  headers: {
+    Authorization: userToken ? `Bearer ${userToken}` : null,
+  },
+});
+
+api.interceptors.request.use((config) => {
+  if (config.method === "delete" && config.data) {
+    config.headers["Content-Type"] = "application/json";
+    config.params = null;
+  }
+  return config;
 });
 
 const isTokenExpired = (token) => {

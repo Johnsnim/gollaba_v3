@@ -50,6 +50,7 @@ const MyPage: React.FC = () => {
         }
       } else {
         setIsToken(false);
+        nav("/login");
       }
     };
 
