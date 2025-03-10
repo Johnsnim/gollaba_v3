@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "697ACQDW6C.com.kihyeon.Gollaba",
+        "paths": [
+          "/voting/pollHashId/*"
+        ]
+      }
+    ]
+  }
+}
