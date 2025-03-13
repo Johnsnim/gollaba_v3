@@ -25,6 +25,7 @@ import UserApi from "../services/user";
 import { useRecoilState } from "recoil";
 import { userFavoritesState, userInfoState } from "../recoil/atom";
 import { set } from "date-fns";
+import { setTime } from "react-datepicker/dist/date_utils";
 
 type PollData = {
   id: string;
@@ -118,9 +119,11 @@ const Poll: React.FC = () => {
     const params = new URLSearchParams(loc.search);
     const isApp = params.get("isApp");
 
-    if (isApp === "true") {
-      nav(`/voting/pollHashId/${pollId}`);
-    }
+    setTimeout(() => {
+      if (isApp === "true") {
+        nav(`/voting/pollHashId/${pollId}`);
+      }
+    }, 1000);
 
     const fetchViewCount = async () => {
       try {
