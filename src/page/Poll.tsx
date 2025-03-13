@@ -119,20 +119,23 @@ const Poll: React.FC = () => {
     const params = new URLSearchParams(loc.search);
     const isApp = params.get("isApp");
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (isApp === "true") {
         nav(`/voting/pollHashId/${pollId}`);
+        return;
       }
+
+      const fetchViewCount = async () => {
+        try {
+          await UserApi.readCount(pollId);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchViewCount();
     }, 1000);
 
-    const fetchViewCount = async () => {
-      try {
-        const response = await UserApi.readCount(pollId);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchViewCount();
+    return () => clearTimeout(timeout);
   }, [pollId, loc.search]);
 
   useEffect(() => {
