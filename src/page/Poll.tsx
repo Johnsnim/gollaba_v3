@@ -130,7 +130,7 @@ const Poll: React.FC = () => {
       }
     };
     fetchViewCount();
-  }, [pollId]);
+  }, [pollId, loc.search]);
 
   useEffect(() => {
     const fetchPollDataAndVoteCheck = async () => {
