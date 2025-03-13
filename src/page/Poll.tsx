@@ -20,7 +20,7 @@ import {
   VoteInactive,
 } from "../asset";
 import VoteApi from "../services/vote";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import UserApi from "../services/user";
 import { useRecoilState } from "recoil";
 import { userFavoritesState, userInfoState } from "../recoil/atom";
@@ -89,7 +89,8 @@ const Modal: React.FC<{
 };
 
 const Poll: React.FC = () => {
-  const navigate = useNavigate();
+  const nav = useNavigate();
+  const loc = useLocation();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
   const [isRedirect, setIsRedirect] = useState<boolean>(false);
@@ -114,6 +115,13 @@ const Poll: React.FC = () => {
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(loc.search);
+    const isApp = params.get("isApp");
+
+    if (isApp === "true") {
+      nav(`/voting/pollHashId/${pollId}`);
+    }
+
     const fetchViewCount = async () => {
       try {
         const response = await UserApi.readCount(pollId);
