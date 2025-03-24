@@ -36,6 +36,7 @@ type PollData = {
   pollType: "ANONYMOUS" | "NAMED";
   endAt: string;
   totalVotingCount: number;
+  readCount: number;
   items: PollItem[];
 };
 
@@ -307,7 +308,7 @@ const Poll: React.FC = () => {
               </div>
             </div>
             <img src={ViewIcon} alt="ViewIcon" className="ViewIcon" />
-            <div>{data.totalVotingCount}</div>
+            <div>{data.readCount}</div>
             <div className="heart-container" title="Like" onClick={toggleLike}>
               <input
                 type="checkbox"
